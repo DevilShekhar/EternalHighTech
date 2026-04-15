@@ -5,11 +5,9 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TestimonialController;
+use App\Http\Controllers\Frontend\HomeFrontController;
 
-
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeFrontController::class, 'index'])->name('home');
 
 Auth::routes();
     // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
