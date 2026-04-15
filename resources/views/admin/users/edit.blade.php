@@ -98,11 +98,32 @@
                                 <label class="form-group-label">Role</label>
                                 <select name="role" class="form-control premium-input">
                                     <option value="">Select role</option>
-                                    <option value="Admin" {{ old('role', $user->role) == 'Admin' ? 'selected' : '' }}>Admin</option>
-                                    <option value="Staff" {{ old('role', $user->role) == 'Staff' ? 'selected' : '' }}>Staff</option>
-                                    <option value="Agent" {{ old('role', $user->role) == 'Agent' ? 'selected' : '' }}>Agent</option>
-                                    <option value="Executive" {{ old('role', $user->role) == 'Executive' ? 'selected' : '' }}>Executive</option>
+
+                                    <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>
+                                        Admin
+                                    </option>
+
+                                    <option value="hr" {{ old('role', $user->role) == 'hr' ? 'selected' : '' }}>
+                                        HR
+                                    </option>
+
+                                    <option value="sales_head" {{ old('role', $user->role) == 'sales_head' ? 'selected' : '' }}>
+                                        Sales Head
+                                    </option>
+
+                                    <option value="sales_executive" {{ old('role', $user->role) == 'sales_executive' ? 'selected' : '' }}>
+                                        Sales Executive
+                                    </option>
+
+                                    <option value="digital_m_head" {{ old('role', $user->role) == 'digital_m_head' ? 'selected' : '' }}>
+                                        Digital Marketing Head
+                                    </option>
+
+                                    <option value="digital_m_executive" {{ old('role', $user->role) == 'digital_m_executive' ? 'selected' : '' }}>
+                                        Digital Marketing Executive
+                                    </option>
                                 </select>
+
                                 @error('role')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
