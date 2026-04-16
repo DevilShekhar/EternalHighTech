@@ -79,14 +79,18 @@
                             </div>
 
                             <div class="col-md-6 mb-4">
-                                <label class="form-group-label">Gender</label>
-                                <select name="gender" class="form-control premium-input">
-                                    <option value="">Select gender</option>
-                                    <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male</option>
-                                    <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female</option>
-                                    <option value="Other" {{ old('gender') == 'Other' ? 'selected' : '' }}>Other</option>
+                                <label class="form-group-label">Role</label>
+                                <select name="role" class="form-control premium-input">
+                                    <option value="">Select role</option>
+                                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                                    <option value="hr" {{ old('role') == 'hr' ? 'selected' : '' }}>HR</option>
+                                    <option value="sales_head" {{ old('role') == 'sales_head' ? 'selected' : '' }}>Sales Head</option>
+                                    <option value="sales_executive" {{ old('role') == 'sales_executive' ? 'selected' : '' }}>Sales Executive</option>
+                                    <option value="digital_m_head" {{ old('role') == 'digital_m_head' ? 'selected' : '' }}>Digital Marketing Head</option>
+                                    <option value="digital_m_executive" {{ old('role') == 'digital_m_executive' ? 'selected' : '' }}>Digital Marketing Executive</option>
                                 </select>
-                                @error('gender')
+
+                                @error('role')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>

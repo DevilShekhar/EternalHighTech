@@ -294,13 +294,18 @@
                            <li><a class="nav-link" href="advance-table.html">Add New Career</a></li>
                         </ul>
                      </li>
-                     <li class="dropdown">
+                    
+                     <li class="dropdown {{ request()->routeIs('testimonial.*') ? 'active' : '' }}">
                         <a href="#" class="menu-toggle nav-link has-dropdown">
-                        <i data-feather="grid"></i><span>Testimonials</span>
+                           <i data-feather="grid"></i><span>Testimonials</span>
                         </a>
                         <ul class="dropdown-menu">
-                           <li><a class="nav-link" href="basic-table.html">All Testimonials</a></li>
-                           <li><a class="nav-link" href="advance-table.html">Add New Testimonials</a></li>
+                           <li class="{{ request()->routeIs('testimonial.index') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('testimonial.index') }}">All Testimonials</a>
+                           </li>
+                           <li class="{{ request()->routeIs('testimonial.create') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('testimonial.create') }}">Add New Testimonial</a>
+                           </li>
                         </ul>
                      </li>
                       <li class="dropdown">
