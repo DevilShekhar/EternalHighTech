@@ -19,13 +19,9 @@ Auth::routes();
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('blogs', BlogController::class);
     Route::resource('users', UserController::class);
+     Route::resource('portfolios', PortfolioController::class);
 
-    Route::get('/portfolio-list', [PortfolioController::class, 'index'])->name('portfolios.index');
-    Route::get('/portfolio-create', [PortfolioController::class, 'create'])->name('portfolios.create');
-    Route::post('/portfolio-store', [PortfolioController::class, 'store'])->name('portfolios.store');     
-    Route::get('/portfolio-edit/{id}', [PortfolioController::class, 'edit'])->name('portfolios.edit');
-    Route::put('/portfolio-update/{id}', [PortfolioController::class, 'update'])->name('portfolios.update');
-    Route::delete('/portfolio-delete/{id}', [PortfolioController::class, 'destroy'])->name('portfolios.destroy');
+    
     Route::resource('testimonial', TestimonialController::class); 
 });
 

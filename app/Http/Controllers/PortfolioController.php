@@ -114,11 +114,16 @@ class PortfolioController extends Controller
         return redirect()->route('portfolios.index')->with('success', 'Portfolio updated successfully.');
     }
 
-    public function destroy($id)
+ 
+     public function destroy(Portfolio $portfolio)
     {
-        $portfolio = Portfolio::findOrFail($id);
-        $portfolio->delete();
+        $portfolio->update([
+            'status' => 0,
+          
+        ]);
 
-        return redirect()->route('portfolios.index')->with('success', 'Portfolio deleted successfully.');
+        return redirect()
+            ->route('portfolios.index')
+            ->with('success', 'portfolio deactivated successfully.');
     }
 }
