@@ -21,6 +21,9 @@
          <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
          <link rel="stylesheet" href="{{ asset('assets/css/components.css') }}">
          <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+           <link rel="stylesheet" href="{{ asset('assets/bundles/summernote/summernote-bs4.css') }}">
+   
+
    </head>
    <body>
       <div id="app">
@@ -274,14 +277,14 @@
                         </ul>
                      </li>
                      <li class="dropdown">
-                        <a href="#" class="menu-toggle nav-link has-dropdown">
-                        <i data-feather="grid"></i><span>Portfolio</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                           <li><a class="nav-link" href="basic-table.html">All Portfolio</a></li>
-                           <li><a class="nav-link" href="advance-table.html">Add New Portfolio</a></li>
-                        </ul>
-                     </li>
+                           <a href="#" class="menu-toggle nav-link has-dropdown">
+                              <i data-feather="grid"></i><span>Portfolio</span>
+                           </a>
+                           <ul class="dropdown-menu">
+                              <li><a class="nav-link" href="{{ route('portfolios.index') }}">All Portfolio</a></li>
+                              <li><a class="nav-link" href="{{ route('portfolios.create') }}">Add New Portfolio</a></li>
+                           </ul>
+                        </li>
                      <li class="dropdown">
                         <a href="#" class="menu-toggle nav-link has-dropdown">
                         <i data-feather="grid"></i><span>Career</span>
@@ -352,5 +355,7 @@
       <script src="{{ asset('assets/js/page/datatables.js') }}"></script>
       <script src="{{ asset('assets/js/scripts.js') }}"></script>
       <script src="{{ asset('assets/js/custom.js') }}"></script>
+        <script src="{{ asset('assets/bundles/summernote/summernote-bs4.js') }}"></script>
+
    </body>
 </html>
