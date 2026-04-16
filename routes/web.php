@@ -26,8 +26,6 @@ Auth::routes();
     Route::get('/portfolio-edit/{id}', [PortfolioController::class, 'edit'])->name('portfolios.edit');
     Route::put('/portfolio-update/{id}', [PortfolioController::class, 'update'])->name('portfolios.update');
     Route::delete('/portfolio-delete/{id}', [PortfolioController::class, 'destroy'])->name('portfolios.destroy');
-    });
-
-    Route::resource('testimonial', TestimonialController::class);
+    Route::resource('testimonial', TestimonialController::class); 
 });
 
