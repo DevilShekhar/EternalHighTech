@@ -270,14 +270,14 @@
                         </ul>
                      </li>
                      <li class="dropdown">
-                        <a href="#" class="menu-toggle nav-link has-dropdown">
+                     <a href="#" class="menu-toggle nav-link has-dropdown">
                         <i data-feather="grid"></i><span>Services</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                           <li><a class="nav-link" href="basic-table.html">All Services</a></li>
-                           <li><a class="nav-link" href="advance-table.html">Add New Services</a></li>
-                        </ul>
-                     </li>
+                     </a>
+                     <ul class="dropdown-menu">
+                        <li><a class="nav-link" href="{{ route('service-category.index') }}">All Category</a></li>
+                        <li><a class="nav-link" href="{{ route('service-category.create') }}">Add Category</a></li>
+                     </ul>
+                  </li>
                      <li class="dropdown">
                            <a href="#" class="menu-toggle nav-link has-dropdown">
                               <i data-feather="grid"></i><span>Portfolio</span>

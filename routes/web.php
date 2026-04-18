@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ServiceCategoryController;
+
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\CareerController;
 use App\Http\Controllers\TestimonialController;
@@ -26,6 +28,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('portfolios', PortfolioController::class);
     Route::resource('career', CareerController::class);
+    Route::resource('service-category', ServiceCategoryController::class);
+
     Route::resource('leads', LeadsController::class);
     Route::get('/check-lead', [LeadController::class, 'checkLead']);
     Route::post('/accept-lead/{id}', [LeadController::class, 'acceptLead']);
