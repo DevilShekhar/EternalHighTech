@@ -260,11 +260,11 @@
                      </li>
                      <li class="dropdown">
                         <a href="#" class="menu-toggle nav-link has-dropdown">
-                        <i data-feather="layout"></i><span>Blogs</span>
+                           <i data-feather="layout"></i><span>Blogs</span>
                         </a>
                         <ul class="dropdown-menu">
-                           <li><a class="nav-link" href="basic-form.html">All Blogs</a></li>
-                           <li><a class="nav-link" href="forms-advanced-form.html">Add New Blogs </a></li>
+                           <li><a class="nav-link" href="{{ route('blogs.index') }}">All Blogs</a></li>
+                           <li><a class="nav-link" href="{{ route('blogs.create') }}">Add New Blog</a></li>
                         </ul>
                      </li>
                      <li class="dropdown">
@@ -290,8 +290,8 @@
                         <i data-feather="grid"></i><span>Career</span>
                         </a>
                         <ul class="dropdown-menu">
-                           <li><a class="nav-link" href="{{ route('career.index') }}">All Career</a></li>
-                           <li><a class="nav-link" href="{{ route('career.create') }}">Add Career</a></li>
+                           <li><a class="nav-link" href="basic-table.html">All Career</a></li>
+                           <li><a class="nav-link" href="advance-table.html">Add New Career</a></li>
                         </ul>
                      </li>
                     
