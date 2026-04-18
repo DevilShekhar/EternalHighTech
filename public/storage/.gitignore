@@ -1,2 +1,5 @@
 *
 !.gitignore
+!public/
+!public/storage/
+public/storage/*

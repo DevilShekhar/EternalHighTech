@@ -6,10 +6,12 @@
    <title>Dashboard</title>
    <meta content="" name="description">
    <meta content="" name="keywords">
+   <meta name="csrf-token" content="{{ csrf_token() }}">
    <!-- Favicons -->
    <link href="{{ asset('assets/img/favicon.png') }}" rel="icon">
    <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
    <!-- Google Fonts -->
+
    <link href="https://fonts.gstatic.com" rel="preconnect">
    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
@@ -260,11 +262,11 @@
                      </li>
                      <li class="dropdown">
                         <a href="#" class="menu-toggle nav-link has-dropdown">
-                        <i data-feather="layout"></i><span>Blogs</span>
+                           <i data-feather="layout"></i><span>Blogs</span>
                         </a>
                         <ul class="dropdown-menu">
-                           <li><a class="nav-link" href="basic-form.html">All Blogs</a></li>
-                           <li><a class="nav-link" href="forms-advanced-form.html">Add New Blogs </a></li>
+                           <li><a class="nav-link" href="{{ route('blogs.index') }}">All Blogs</a></li>
+                           <li><a class="nav-link" href="{{ route('blogs.create') }}">Add New Blog</a></li>
                         </ul>
                      </li>
                      <li class="dropdown">
@@ -290,8 +292,8 @@
                         <i data-feather="grid"></i><span>Career</span>
                         </a>
                         <ul class="dropdown-menu">
-                           <li><a class="nav-link" href="{{ route('career.index') }}">All Career</a></li>
-                           <li><a class="nav-link" href="{{ route('career.create') }}">Add Career</a></li>
+                           <li><a class="nav-link" href="basic-table.html">All Career</a></li>
+                           <li><a class="nav-link" href="advance-table.html">Add New Career</a></li>
                         </ul>
                      </li>
                     
@@ -319,10 +321,10 @@
                      </li>
                       <li class="dropdown">
                         <a href="#" class="menu-toggle nav-link has-dropdown">
-                        <i data-feather="grid"></i><span>Lead</span>
+                        <i data-feather="grid"></i><span>Leads</span>
                         </a>
                         <ul class="dropdown-menu">
-                           <li><a class="nav-link" href="basic-table.html">All Lead</a></li>
+                           <li><a class="nav-link" href="{{ route('leads.index') }}">All Lead</a></li>
                         </ul>
                      </li>
                      <li>
@@ -356,6 +358,145 @@
       <script src="{{ asset('assets/js/scripts.js') }}"></script>
       <script src="{{ asset('assets/js/custom.js') }}"></script>
         <script src="{{ asset('assets/bundles/summernote/summernote-bs4.js') }}"></script>
+        <audio id="leadSound" src="{{ asset('sounds/notification.mp3') }}" preload="auto"></audio>
+<script>
+let currentLeadId = null;
 
+const leadSound = document.getElementById('leadSound');
+
+// 🔓 UNLOCK AUDIO (VERY IMPORTANT)
+document.addEventListener('click', function () {
+    leadSound.play().then(() => {
+        leadSound.pause();
+        leadSound.currentTime = 0;
+    }).catch(() => {});
+}, { once: true });
+
+setInterval(function () {
+
+    fetch('/check-lead', {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Check failed " + res.status);
+        return res.json();
+    })
+    .then(data => {
+
+        console.log("LEAD DATA:", data);
+
+        // ❌ no lead
+        if (!data || !data.id) {
+            currentLeadId = null;
+            return;
+        }
+
+        // ❌ prevent duplicate popup
+        if (currentLeadId === data.id) return;
+
+        currentLeadId = data.id;
+
+        Swal.fire({
+            title: "🚀 New Lead Assigned",
+            html: `
+                <b>Name:</b> ${data.name}<br>
+                <b>Phone:</b> ${data.phone}<br>
+                <b>Service:</b> ${data.services}<br>
+                <b>Budget:</b> ${data.budget}
+            `,
+            icon: "info",
+            showCancelButton: true,
+            confirmButtonText: "Accept Lead",
+            cancelButtonText: "Ignore",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            timer: 300000,
+            timerProgressBar: true,
+
+            // 🔊 SOUND PLAY HERE
+            didOpen: () => {
+                setTimeout(() => {
+                    leadSound.currentTime = 0;
+                    leadSound.play().then(() => {
+                        console.log("Sound played ✅");
+                    }).catch(err => {
+                        console.log("Sound blocked ❌", err);
+                    });
+                }, 200);
+            }
+        }).then((result) => {
+
+            // 🛑 STOP SOUND
+            leadSound.pause();
+            leadSound.currentTime = 0;
+
+            if (result.isConfirmed) {
+
+                fetch(`/accept-lead/${data.id}`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({})
+                })
+                .then(res => res.json())
+                .then(res => {
+
+                    if (res.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Assigned!',
+                            text: 'Lead assigned to you.'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: res.error || 'Already assigned'
+                        });
+                    }
+
+                    currentLeadId = null;
+                })
+                .catch(() => {
+                    currentLeadId = null;
+                });
+
+            } else {
+
+                fetch(`/skip-lead/${data.id}`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({})
+                })
+                .then(() => {
+                    currentLeadId = null;
+                })
+                .catch(() => {
+                    currentLeadId = null;
+                });
+            }
+
+        });
+
+    })
+    .catch(err => {
+        console.error("CHECK ERROR:", err);
+    });
+
+}, 3000);
+</script>
    </body>
 </html>
