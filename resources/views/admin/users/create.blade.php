@@ -93,22 +93,20 @@
                                 @error('role')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
-                            </div>
-
+                            </div>                            
                             <div class="col-md-6 mb-4">
-                                <label class="form-group-label">Role</label>
-                                <select name="role" class="form-control premium-input">
-                                    <option value="">Select role</option>
-                                    <option value="Admin" {{ old('role') == 'Admin' ? 'selected' : '' }}>Admin</option>
-                                    <option value="Staff" {{ old('role') == 'Staff' ? 'selected' : '' }}>Staff</option>
-                                    <option value="Agent" {{ old('role') == 'Agent' ? 'selected' : '' }}>Agent</option>
-                                    <option value="Executive" {{ old('role') == 'Executive' ? 'selected' : '' }}>Executive</option>
+                                <label class="form-group-label">Gender</label>
+                                <select name="gender" class="form-control premium-input">
+                                    <option value="">Select gender</option>
+                                    <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male</option>
+                                    <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female</option>
+                                    <option value="Other" {{ old('gender') == 'Other' ? 'selected' : '' }}>Other</option>
                                 </select>
-                                @error('role')
+
+                                @error('gender')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
-
                             <div class="col-md-6 mb-4">
                                 <label class="form-group-label">Date of Birth</label>
                                 <input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}" class="form-control premium-input">
