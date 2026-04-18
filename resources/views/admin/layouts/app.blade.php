@@ -290,8 +290,8 @@
                         <i data-feather="grid"></i><span>Career</span>
                         </a>
                         <ul class="dropdown-menu">
-                           <li><a class="nav-link" href="basic-table.html">All Career</a></li>
-                           <li><a class="nav-link" href="advance-table.html">Add New Career</a></li>
+                           <li><a class="nav-link" href="{{ route('career.index') }}">All Career</a></li>
+                           <li><a class="nav-link" href="{{ route('career.create') }}">Add Career</a></li>
                         </ul>
                      </li>
                     
