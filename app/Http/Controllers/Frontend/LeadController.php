@@ -86,94 +86,94 @@ class LeadController extends Controller
 
     // ✅ CHECK LEAD (for popup + rotation)
  public function checkLead()
-{
-    $lead = Lead::where('status', 'pending')->latest()->first();
+    {
+        $lead = Lead::where('status', 'pending')->latest()->first();
 
-    if (!$lead) {
+        if (!$lead) {
+            return response()->json(null);
+        }
+
+        $users = User::where('role', 'sales_executive')->orderBy('id')->get();
+
+        if ($users->isEmpty()) {
+            return response()->json(null);
+        }
+
+        $totalUsers = $users->count();
+
+        // ⏱ AUTO ROTATE AFTER 5 MIN
+        if ($lead->notified_at && now()->diffInSeconds($lead->notified_at) >= 300) {
+
+            $lead->current_user_index++;
+
+            if ($lead->current_user_index >= $totalUsers) {
+                $lead->current_user_index = 0;
+            }
+
+            $lead->notified_at = now();
+            $lead->save();
+        }
+
+        $currentUser = $users[$lead->current_user_index] ?? null;
+
+        if ($currentUser && auth()->check() && auth()->id() == $currentUser->id) {
+
+            return response()->json([
+                'id' => $lead->id,
+                'name' => $lead->name,
+                'phone' => $lead->phone,
+                'services' => $lead->services,
+                'budget' => $lead->budget,
+            ]);
+        }
+
         return response()->json(null);
     }
 
-    $users = User::where('role', 'sales_executive')->orderBy('id')->get();
+    public function acceptLead($id)
+    {
+        if (!auth()->check()) {
+            return response()->json(['error' => 'Not logged in'], 401);
+        }
 
-    if ($users->isEmpty()) {
-        return response()->json(null);
+        $lead = Lead::findOrFail($id);
+
+        if ($lead->status === 'assigned') {
+            return response()->json(['error' => 'Already assigned']);
+        }
+
+        $lead->user_id = auth()->id();
+        $lead->status = 'assigned';
+        $lead->save();
+
+        return response()->json([
+            'success' => true,
+            'user_id' => auth()->id()
+        ]);
     }
+    public function skipLead($id)
+    {
+        $lead = Lead::find($id);
 
-    $totalUsers = $users->count();
+        if (!$lead || $lead->status === 'assigned') {
+            return response()->json(['error' => 'Invalid'], 400);
+        }
 
-    // ⏱ AUTO ROTATE AFTER 5 MIN
-    if ($lead->notified_at && now()->diffInSeconds($lead->notified_at) >= 300) {
+        $users = User::where('role', 'sales_executive')->orderBy('id')->get();
+
+        if ($users->isEmpty()) {
+            return response()->json(['error' => 'No users']);
+        }
 
         $lead->current_user_index++;
 
-        if ($lead->current_user_index >= $totalUsers) {
+        if ($lead->current_user_index >= $users->count()) {
             $lead->current_user_index = 0;
         }
 
-        $lead->notified_at = now();
+        $lead->notified_at = now(); // reset timer
         $lead->save();
+
+        return response()->json(['success' => true]);
     }
-
-    $currentUser = $users[$lead->current_user_index] ?? null;
-
-    if ($currentUser && auth()->check() && auth()->id() == $currentUser->id) {
-
-        return response()->json([
-            'id' => $lead->id,
-            'name' => $lead->name,
-            'phone' => $lead->phone,
-            'services' => $lead->services,
-            'budget' => $lead->budget,
-        ]);
-    }
-
-    return response()->json(null);
-}
-
- public function acceptLead($id)
-{
-    if (!auth()->check()) {
-        return response()->json(['error' => 'Not logged in'], 401);
-    }
-
-    $lead = Lead::findOrFail($id);
-
-    if ($lead->status === 'assigned') {
-        return response()->json(['error' => 'Already assigned']);
-    }
-
-    $lead->user_id = auth()->id();
-    $lead->status = 'assigned';
-    $lead->save();
-
-    return response()->json([
-        'success' => true,
-        'user_id' => auth()->id()
-    ]);
-}
-public function skipLead($id)
-{
-    $lead = Lead::find($id);
-
-    if (!$lead || $lead->status === 'assigned') {
-        return response()->json(['error' => 'Invalid'], 400);
-    }
-
-    $users = User::where('role', 'sales_executive')->orderBy('id')->get();
-
-    if ($users->isEmpty()) {
-        return response()->json(['error' => 'No users']);
-    }
-
-    $lead->current_user_index++;
-
-    if ($lead->current_user_index >= $users->count()) {
-        $lead->current_user_index = 0;
-    }
-
-    $lead->notified_at = now(); // reset timer
-    $lead->save();
-
-    return response()->json(['success' => true]);
-}
 }
