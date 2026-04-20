@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Lead;
 use App\Models\User;
+use App\Models\LeadLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -83,9 +84,8 @@ class LeadController extends Controller
         return back()->with('success', 'Thank you! We will contact you soon.');
     }
 
-
-    // ✅ CHECK LEAD (for popup + rotation)
- public function checkLead()
+    //  CHECK LEAD (with logging)
+    public function checkLead()
     {
         $lead = Lead::where('status', 'pending')->latest()->first();
 
@@ -118,6 +118,21 @@ class LeadController extends Controller
 
         if ($currentUser && auth()->check() && auth()->id() == $currentUser->id) {
 
+            // ✅ SAFE LOGGING (ENUM FIXED → 'viewed')
+            try {
+                $alreadyViewed = LeadLog::where([
+                    'lead_id' => $lead->id,
+                    'user_id' => auth()->id(),
+                    'action' => 'viewed'
+                ])->exists();
+
+                if (!$alreadyViewed) {
+                    LeadLog::log($lead->id, auth()->id(), 'viewed');
+                }
+            } catch (\Exception $e) {
+                \Log::error('LeadLog error: ' . $e->getMessage());
+            }
+
             return response()->json([
                 'id' => $lead->id,
                 'name' => $lead->name,
@@ -130,6 +145,7 @@ class LeadController extends Controller
         return response()->json(null);
     }
 
+    // ✅ ACCEPT LEAD
     public function acceptLead($id)
     {
         if (!auth()->check()) {
@@ -146,11 +162,20 @@ class LeadController extends Controller
         $lead->status = 'assigned';
         $lead->save();
 
+        // ✅ LOG ACCEPTED
+        try {
+            LeadLog::log($lead->id, auth()->id(), 'accepted');
+        } catch (\Exception $e) {
+            \Log::error('LeadLog error: ' . $e->getMessage());
+        }
+
         return response()->json([
             'success' => true,
             'user_id' => auth()->id()
         ]);
     }
+
+    // ✅ SKIP LEAD
     public function skipLead($id)
     {
         $lead = Lead::find($id);
@@ -171,8 +196,15 @@ class LeadController extends Controller
             $lead->current_user_index = 0;
         }
 
-        $lead->notified_at = now(); // reset timer
+        $lead->notified_at = now();
         $lead->save();
+
+        // ✅ LOG SKIPPED
+        try {
+            LeadLog::log($lead->id, auth()->id(), 'skipped');
+        } catch (\Exception $e) {
+            \Log::error('LeadLog error: ' . $e->getMessage());
+        }
 
         return response()->json(['success' => true]);
     }
