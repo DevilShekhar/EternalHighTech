@@ -1,8 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
-
-
+@if(auth()->check() && auth()->user()->role === 'admin')
 <section class="section">
     <div class="section-body">
         <div class="card premium-card">
@@ -123,4 +122,7 @@
         });
     });
 </script>
+@else
+    @php abort(403); @endphp
+@endif
 @endsection

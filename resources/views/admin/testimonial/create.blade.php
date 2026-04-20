@@ -1,5 +1,7 @@
 @extends('admin.layouts.app')
 @section('content')
+@if(auth()->check() && auth()->user()->role === 'admin')
+
     <section class="section premium-dashboard">
         <div class="premium-page-head">
             <div class="premium-page-title">
@@ -88,4 +90,7 @@
                 </div>
             </form>
         </section>
+@else
+    @php abort(403); @endphp
+@endif
 @endsection

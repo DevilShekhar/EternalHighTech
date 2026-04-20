@@ -1,6 +1,8 @@
 @extends('admin.layouts.app')
 
 @section('content')
+@if(auth()->check() && auth()->user()->role === 'admin')
+
 <section class="section">
     <div class="section-header">
         <h1>Service Category List</h1>
@@ -65,4 +67,7 @@
         </div>
     </div>
 </section>
+@else
+    @php abort(403); @endphp
+@endif
 @endsection

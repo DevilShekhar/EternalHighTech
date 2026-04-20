@@ -16,12 +16,14 @@
       <!-- Template Main CSS File -->
       <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
       <!-- Add this to your <head> section if SweetAlert is not included -->
+
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <link rel="stylesheet" href="{{ asset('assets/css/app.min.css') }}">
       <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
       <link rel="stylesheet" href="{{ asset('assets/css/components.css') }}">
       <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
       <link rel="stylesheet" href="{{ asset('assets/bundles/summernote/summernote-bs4.css') }}">
+
    </head>
    <body>
       <div id="app">
