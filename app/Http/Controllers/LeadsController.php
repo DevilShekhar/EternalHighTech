@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 use App\Models\Lead;
+use App\Models\LeadFollowup;
+use Carbon\Carbon;
 
 class LeadsController extends Controller
 {
@@ -21,52 +23,79 @@ class LeadsController extends Controller
 
         return view('admin.leads.index', compact('leads'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show($id)
     {
-        //
-    }
+        $lead = Lead::with('followups.user')->findOrFail($id);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+        // security check (sales should see only their leads)
+        if (Auth::user()->role !== 'admin' && $lead->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        return view('admin.leads.show', compact('lead'));
+    }
+    public function storeFollowup(Request $request, $leadId)
     {
-        //
-    }
+        $request->validate([
+            'action_type' => 'required',
+            'status' => 'required',
+            'note' => 'required',
+            'next_followup_date' => 'nullable|date'
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $lead = Lead::findOrFail($leadId);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        // security check
+        if (Auth::user()->role !== 'admin' && $lead->user_id !== Auth::id()) {
+            abort(403);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        LeadFollowup::create([
+            'lead_id' => $lead->id,
+            'user_id' => Auth::id(),
+            'action_type' => $request->action_type,
+            'status' => $request->status,
+            'note' => $request->note,
+            'next_followup_date' => $request->next_followup_date,
+        ]);
 
+        // update lead status also
+        $lead->update([
+            'status' => $request->status
+        ]);
+
+        return back()->with('success', 'Follow-up saved successfully');
+    }
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
         //
+    }
+    public function checkFollowups()
+    {
+        $now = Carbon::now();
+        $oneHourLater = Carbon::now()->addHour();
+
+        $followups = LeadFollowup::with('lead')
+            ->where('user_id', Auth::id())
+            ->where('reminder_sent', false)
+            ->whereBetween('next_followup_date', [$now, $oneHourLater])
+            ->get();
+
+        if ($followups->count()) {
+
+            foreach ($followups as $f) {
+                $f->update(['reminder_sent' => true]);
+            }
+
+            return response()->json([
+                'status' => true,
+                'data' => $followups
+            ]);
+        }
+
+        return response()->json(['status' => false]);
     }
 }
