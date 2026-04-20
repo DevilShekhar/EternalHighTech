@@ -167,103 +167,135 @@
                      </a>
                   </div>
                   <ul class="sidebar-menu">
-                     <li>
+
+                     {{-- Dashboard --}}
+                     <li class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
                         <a href="{{ route('dashboard') }}" class="nav-link">
-                        <i data-feather="monitor"></i><span>Dashboard</span>
+                              <i data-feather="monitor"></i><span>Dashboard</span>
                         </a>
                      </li>
-                     <li class="dropdown active">
+
+                     {{-- ONLY ADMIN --}}
+                     @if(auth()->check() && auth()->user()->role === 'admin')
+
+                     {{-- Users --}}
+                     <li class="dropdown {{ request()->routeIs('users.*') ? 'active' : '' }}">
                         <a href="#" class="menu-toggle nav-link has-dropdown">
-                        <i data-feather="users"></i><span>User</span>
+                              <i data-feather="users"></i><span>User</span>
                         </a>
                         <ul class="dropdown-menu">
-                           <li class="{{ request()->routeIs('users.index') ? 'active' : '' }}">
-                              <a class="nav-link" href="{{ route('users.index') }}">All User</a>
-                           </li>
-                           <li class="{{ request()->routeIs('users.create') ? 'active' : '' }}">
-                              <a class="nav-link" href="{{ route('users.create') }}">Add New User</a>
-                           </li>
-                        </ul>
-                     </li>
-                     <li class="dropdown">
-                        <a href="#" class="menu-toggle nav-link has-dropdown">
-                        <i data-feather="layout"></i><span>Blogs</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                           <li><a class="nav-link" href="{{ route('blogs.index') }}">All Blogs</a></li>
-                           <li><a class="nav-link" href="{{ route('blogs.create') }}">Add New Blog</a></li>
+                              <li class="{{ request()->routeIs('users.index') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('users.index') }}">All User</a>
+                              </li>
+                              <li class="{{ request()->routeIs('users.create') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('users.create') }}">Add New User</a>
+                              </li>
                         </ul>
                      </li>
 
+                     {{-- Blogs --}}
+                     <li class="dropdown {{ request()->routeIs('blogs.*') ? 'active' : '' }}">
+                        <a href="#" class="menu-toggle nav-link has-dropdown">
+                              <i data-feather="layout"></i><span>Blogs</span>
                         </a>
                         <ul class="dropdown-menu">
-                           <li><a class="nav-link" href="{{ route('service-category.index') }}">All Category</a></li>
-                           <li><a class="nav-link" href="{{ route('service-category.create') }}">Add Category</a></li>
-
-                           <li><a class="nav-link" href="{{ route('services.index') }}">All Services</a></li>
-                           <li><a class="nav-link" href="{{ route('services.create') }}">Add Services</a></li>
+                              <li class="{{ request()->routeIs('blogs.index') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('blogs.index') }}">All Blogs</a>
+                              </li>
+                              <li class="{{ request()->routeIs('blogs.create') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('blogs.create') }}">Add New Blog</a>
+                              </li>
                         </ul>
                      </li>
-                     <li class="dropdown">
-                           <a href="#" class="menu-toggle nav-link has-dropdown">
+
+                     {{-- Services --}}
+                     <li class="dropdown {{ request()->routeIs('service-category.*') || request()->routeIs('services.*') ? 'active' : '' }}">
+                        <a href="#" class="menu-toggle nav-link has-dropdown">
+                              <i data-feather="layout"></i><span>Services</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                              <li class="{{ request()->routeIs('service-category.index') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('service-category.index') }}">All Category</a>
+                              </li>
+                              <li class="{{ request()->routeIs('service-category.create') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('service-category.create') }}">Add Category</a>
+                              </li>
+                              <li class="{{ request()->routeIs('services.index') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('services.index') }}">All Services</a>
+                              </li>
+                              <li class="{{ request()->routeIs('services.create') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('services.create') }}">Add Services</a>
+                              </li>
+                        </ul>
+                     </li>
+
+                     {{-- Portfolio --}}
+                     <li class="dropdown {{ request()->routeIs('portfolios.*') ? 'active' : '' }}">
+                        <a href="#" class="menu-toggle nav-link has-dropdown">
                               <i data-feather="grid"></i><span>Portfolio</span>
-                           </a>
-                           <ul class="dropdown-menu">
-                              <li><a class="nav-link" href="{{ route('portfolios.index') }}">All Portfolio</a></li>
-                              <li><a class="nav-link" href="{{ route('portfolios.create') }}">Add New Portfolio</a></li>
-                           </ul>
-                        </li>
-                   <li class="dropdown">
-                     <a href="#" class="menu-toggle nav-link has-dropdown">
-                        <i data-feather="briefcase"></i><span>Career</span>
-                     </a>
-                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="{{ route('career.index') }}">All Career</a></li>
-                        <li><a class="nav-link" href="{{ route('career.create') }}">Add Career</a></li>
-                     </ul>
-                  </li>
-                    
+                        </a>
+                        <ul class="dropdown-menu">
+                              <li class="{{ request()->routeIs('portfolios.index') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('portfolios.index') }}">All Portfolio</a>
+                              </li>
+                              <li class="{{ request()->routeIs('portfolios.create') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('portfolios.create') }}">Add New Portfolio</a>
+                              </li>
+                        </ul>
+                     </li>
+
+                     {{-- Career --}}
+                     <li class="dropdown {{ request()->routeIs('career.*') ? 'active' : '' }}">
+                        <a href="#" class="menu-toggle nav-link has-dropdown">
+                              <i data-feather="briefcase"></i><span>Career</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                              <li class="{{ request()->routeIs('career.index') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('career.index') }}">All Career</a>
+                              </li>
+                              <li class="{{ request()->routeIs('career.create') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('career.create') }}">Add Career</a>
+                              </li>
+                        </ul>
+                     </li>
+
+                     {{-- Testimonials --}}
                      <li class="dropdown {{ request()->routeIs('testimonial.*') ? 'active' : '' }}">
                         <a href="#" class="menu-toggle nav-link has-dropdown">
-                        <i data-feather="grid"></i><span>Testimonials</span>
+                              <i data-feather="grid"></i><span>Testimonials</span>
                         </a>
                         <ul class="dropdown-menu">
-                           <li class="{{ request()->routeIs('testimonial.index') ? 'active' : '' }}">
-                              <a class="nav-link" href="{{ route('testimonial.index') }}">All Testimonials</a>
-                           </li>
-                           <li class="{{ request()->routeIs('testimonial.create') ? 'active' : '' }}">
-                              <a class="nav-link" href="{{ route('testimonial.create') }}">Add New Testimonial</a>
-                           </li>
+                              <li class="{{ request()->routeIs('testimonial.index') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('testimonial.index') }}">All Testimonials</a>
+                              </li>
+                              <li class="{{ request()->routeIs('testimonial.create') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('testimonial.create') }}">Add New Testimonial</a>
+                              </li>
                         </ul>
                      </li>
-                     <li class="dropdown">
-                        <a href="#" class="menu-toggle nav-link has-dropdown">
-                        <i data-feather="grid"></i><span>Landing Page</span>
+                  @endif
+                     {{-- Leads --}}
+                     <li class="{{ request()->routeIs('leads.index') ? 'active' : '' }}">
+                        <a href="{{ route('leads.index') }}" class="nav-link">
+                              <i data-feather="grid"></i><span>Leads</span>
                         </a>
-                        <ul class="dropdown-menu">
-                           <li><a class="nav-link" href="basic-table.html">All landing</a></li>
-                           <li><a class="nav-link" href="advance-table.html">Add landing</a></li>
-                        </ul>
                      </li>
-                     <li class="dropdown">
-                        <a href="#" class="menu-toggle nav-link has-dropdown">
-                        <i data-feather="grid"></i><span>Leads</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                           <li><a class="nav-link" href="{{ route('leads.index') }}">All Lead</a></li>
-                        </ul>
-                     </li>
+
+                     
+
+                     {{-- Logout --}}
                      <li>
-                        <a href="auth-login.html" class="nav-link">
-                        <i data-feather="log-out"></i><span>feedback</span>
+                        <a href="{{ route('logout') }}" class="nav-link"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                              <i data-feather="log-out"></i><span>Logout</span>
                         </a>
                      </li>
-                     <li>
-                        <a href="auth-login.html" class="nav-link">
-                        <i data-feather="log-out"></i><span>Logout</span>
-                        </a>
-                     </li>
+
                   </ul>
+
+                  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                     @csrf
+                  </form>
                </aside>
             </div>
             <main id="main-contentmain" class="main-content">
