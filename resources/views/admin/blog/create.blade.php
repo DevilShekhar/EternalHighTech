@@ -1,0 +1,189 @@
+@extends('admin.layouts.app')
+
+@section('content')
+
+
+<section class="section">
+    <div class="section-header">
+        <h1>Add New Blog</h1>
+    </div>
+
+    <div class="section-body">
+        <div class="card">
+            <div class="card-header">
+                <h4>Blog Wizard Form</h4>
+            </div>
+
+            <div class="card-body">
+                <form action="{{ route('blogs.store') }}" method="POST" enctype="multipart/form-data" id="blogForm">
+                    @csrf
+
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-2">
+                            <button type="button" class="btn btn-primary btn-block" id="stepBtn1" onclick="showStep(1)">
+                                1. Basic Info
+                            </button>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <button type="button" class="btn btn-light btn-block" id="stepBtn2" onclick="showStep(2)">
+                                2. Meta Details
+                            </button>
+                        </div>
+                    </div>
+
+                    {{-- Step 1 --}}
+                    <div id="step1">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Heading</label>
+                                    <input type="text" name="heading" class="form-control" value="{{ old('heading') }}">
+                                    @error('heading')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Sub Heading</label>
+                                    <input type="text" name="sub_heading" class="form-control" value="{{ old('sub_heading') }}">
+                                    @error('sub_heading')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Heading Image</label>
+                                    <input type="file" name="heading_image" class="form-control">
+                                    @error('heading_image')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Image</label>
+                                    <input type="file" name="image" class="form-control">
+                                    @error('image')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Title</label>
+                                    <input type="text" name="title" class="form-control" value="{{ old('title') }}">
+                                    @error('title')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Company Name</label>
+                                    <input type="text" name="company_name" class="form-control" value="{{ old('company_name') }}">
+                                    @error('company_name')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <textarea name="description" class="form-control summernote">{{ old('description') }}</textarea>
+                                    @error('description')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-right">
+                            <button type="button" class="btn btn-primary" onclick="showStep(2)">Next</button>
+                        </div>
+                    </div>
+
+                    {{-- Step 2 --}}
+                    <div id="step2" style="display:none;">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Tags</label>
+                                    <input type="text" name="tags" class="form-control" value="{{ old('tags') }}">
+                                    @error('tags')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Meta Title</label>
+                                    <input type="text" name="meta_title" class="form-control" value="{{ old('meta_title') }}">
+                                    @error('meta_title')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Meta Keyword</label>
+                                    <textarea name="meta_keyword" class="form-control" rows="4">{{ old('meta_keyword') }}</textarea>
+                                    @error('meta_keyword')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Meta Description</label>
+                                    <textarea name="meta_description" class="form-control" rows="4">{{ old('meta_description') }}</textarea>
+                                    @error('meta_description')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-right">
+                            <button type="button" class="btn btn-light mr-2" onclick="showStep(1)">Previous</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function showStep(step) {
+        document.getElementById('step1').style.display = (step === 1) ? 'block' : 'none';
+        document.getElementById('step2').style.display = (step === 2) ? 'block' : 'none';
+
+        if (step === 1) {
+            document.getElementById('stepBtn1').classList.remove('btn-light');
+            document.getElementById('stepBtn1').classList.add('btn-primary');
+
+            document.getElementById('stepBtn2').classList.remove('btn-primary');
+            document.getElementById('stepBtn2').classList.add('btn-light');
+        } else {
+            document.getElementById('stepBtn2').classList.remove('btn-light');
+            document.getElementById('stepBtn2').classList.add('btn-primary');
+
+            document.getElementById('stepBtn1').classList.remove('btn-primary');
+            document.getElementById('stepBtn1').classList.add('btn-light');
+        }
+    }
+</script>
+@endsection
