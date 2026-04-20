@@ -45,7 +45,7 @@ $('#save-stage').DataTable({
   stateSave: true
 });
 $('#tableExport').DataTable({
-  dom: 'Bfrtip',
+  dom: 'frtip',
   buttons: [
     'copy', 'csv', 'excel', 'pdf', 'print'
   ]
