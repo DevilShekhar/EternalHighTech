@@ -357,146 +357,136 @@
       <script src="{{ asset('assets/js/page/datatables.js') }}"></script>
       <script src="{{ asset('assets/js/scripts.js') }}"></script>
       <script src="{{ asset('assets/js/custom.js') }}"></script>
-        <script src="{{ asset('assets/bundles/summernote/summernote-bs4.js') }}"></script>
-        <audio id="leadSound" src="{{ asset('sounds/notification.mp3') }}" preload="auto"></audio>
-<script>
-let currentLeadId = null;
+      <script src="{{ asset('assets/bundles/summernote/summernote-bs4.js') }}"></script>
+      <!-- 🔊 SOUND -->
+      <audio id="leadSound" src="{{ asset('sounds/notification.mp3') }}" preload="auto"></audio>
 
-const leadSound = document.getElementById('leadSound');
+      <script>
+         let isPopupOpen = false;
 
-// 🔓 UNLOCK AUDIO (VERY IMPORTANT)
-document.addEventListener('click', function () {
-    leadSound.play().then(() => {
-        leadSound.pause();
-        leadSound.currentTime = 0;
-    }).catch(() => {});
-}, { once: true });
+         const leadSound = document.getElementById('leadSound');
 
-setInterval(function () {
+         // 🔓 UNLOCK AUDIO (browser requirement)
+         document.addEventListener('click', function () {
+            leadSound.play().then(() => {
+               leadSound.pause();
+               leadSound.currentTime = 0;
+            }).catch(() => {});
+         }, { once: true });
 
-    fetch('/check-lead', {
-        method: 'GET',
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json'
-        }
-    })
-    .then(res => {
-        if (!res.ok) throw new Error("Check failed " + res.status);
-        return res.json();
-    })
-    .then(data => {
+         setInterval(function () {
 
-        console.log("LEAD DATA:", data);
+            // ❌ do not run if popup already open
+            if (isPopupOpen) return;
 
-        // ❌ no lead
-        if (!data || !data.id) {
-            currentLeadId = null;
-            return;
-        }
+            fetch('/check-lead', {
+               method: 'GET',
+               credentials: 'same-origin',
+               headers: {
+                     'Accept': 'application/json'
+               }
+            })
+            .then(res => {
+               if (!res.ok) throw new Error("Check failed " + res.status);
+               return res.json();
+            })
+            .then(data => {
 
-        // ❌ prevent duplicate popup
-        if (currentLeadId === data.id) return;
+               if (!data || !data.id) return;
 
-        currentLeadId = data.id;
+               isPopupOpen = true;
 
-        Swal.fire({
-            title: "🚀 New Lead Assigned",
-            html: `
-                <b>Name:</b> ${data.name}<br>
-                <b>Phone:</b> ${data.phone}<br>
-                <b>Service:</b> ${data.services}<br>
-                <b>Budget:</b> ${data.budget}
-            `,
-            icon: "info",
-            showCancelButton: true,
-            confirmButtonText: "Accept Lead",
-            cancelButtonText: "Ignore",
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            timer: 300000,
-            timerProgressBar: true,
+               Swal.fire({
+                     title: "🚀 New Lead Assigned",
+                     html: `
+                        <b>Name:</b> ${data.name}<br>
+                        <b>Phone:</b> ${data.phone}<br>
+                        <b>Service:</b> ${data.services}<br>
+                        <b>Budget:</b> ${data.budget}
+                     `,
+                     icon: "info",
+                     showCancelButton: true,
+                     confirmButtonText: "Accept Lead",
+                     cancelButtonText: "Ignore",
+                     allowOutsideClick: false,
+                     allowEscapeKey: false,
+                     timer: 300000,
+                     timerProgressBar: true,
 
-            // 🔊 SOUND PLAY HERE
-            didOpen: () => {
-                setTimeout(() => {
-                    leadSound.currentTime = 0;
-                    leadSound.play().then(() => {
-                        console.log("Sound played ✅");
-                    }).catch(err => {
-                        console.log("Sound blocked ❌", err);
-                    });
-                }, 200);
-            }
-        }).then((result) => {
+                     // 🔊 CONTINUOUS SOUND
+                     didOpen: () => {
 
-            // 🛑 STOP SOUND
-            leadSound.pause();
-            leadSound.currentTime = 0;
+                        leadSound.loop = true; // 🔁 repeat forever
+                        leadSound.currentTime = 0;
 
-            if (result.isConfirmed) {
+                        leadSound.play()
+                           .then(() => console.log("🔊 Sound playing..."))
+                           .catch(err => console.log("❌ Sound blocked:", err));
+                     }
+               }).then((result) => {
 
-                fetch(`/accept-lead/${data.id}`, {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'Accept': 'application/json'
-                    },
-                    credentials: 'same-origin',
-                    body: JSON.stringify({})
-                })
-                .then(res => res.json())
-                .then(res => {
+                     // 🛑 STOP SOUND COMPLETELY
+                     leadSound.pause();
+                     leadSound.currentTime = 0;
+                     leadSound.loop = false;
 
-                    if (res.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Assigned!',
-                            text: 'Lead assigned to you.'
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: res.error || 'Already assigned'
-                        });
-                    }
+                     isPopupOpen = false;
 
-                    currentLeadId = null;
-                })
-                .catch(() => {
-                    currentLeadId = null;
-                });
+                     if (result.isConfirmed) {
 
-            } else {
+                        fetch(`/accept-lead/${data.id}`, {
+                           method: "POST",
+                           headers: {
+                                 'Content-Type': 'application/json',
+                                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                 'Accept': 'application/json'
+                           },
+                           credentials: 'same-origin',
+                           body: JSON.stringify({})
+                        })
+                        .then(res => res.json())
+                        .then(res => {
 
-                fetch(`/skip-lead/${data.id}`, {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'Accept': 'application/json'
-                    },
-                    credentials: 'same-origin',
-                    body: JSON.stringify({})
-                })
-                .then(() => {
-                    currentLeadId = null;
-                })
-                .catch(() => {
-                    currentLeadId = null;
-                });
-            }
+                           if (res.success) {
+                                 Swal.fire({
+                                    icon: 'success',
+                                    title: 'Assigned!',
+                                    text: 'Lead assigned to you.'
+                                 });
+                           } else {
+                                 Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: res.error || 'Already assigned'
+                                 });
+                           }
 
-        });
+                        })
+                        .catch(err => console.error(err));
 
-    })
-    .catch(err => {
-        console.error("CHECK ERROR:", err);
-    });
+                     } else {
 
-}, 3000);
-</script>
+                        fetch(`/skip-lead/${data.id}`, {
+                           method: "POST",
+                           headers: {
+                                 'Content-Type': 'application/json',
+                                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                 'Accept': 'application/json'
+                           },
+                           credentials: 'same-origin',
+                           body: JSON.stringify({})
+                        })
+                        .catch(err => console.error(err));
+                     }
+
+               });
+
+            })
+            .catch(err => {
+               console.error("CHECK ERROR:", err);
+            });
+
+         }, 3000);
+      </script>
    </body>
 </html>
