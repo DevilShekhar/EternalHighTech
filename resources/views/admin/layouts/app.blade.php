@@ -273,7 +273,7 @@
                               </li>
                         </ul>
                      </li>
-@endif
+                  @endif
                      {{-- Leads --}}
                      <li class="{{ request()->routeIs('leads.index') ? 'active' : '' }}">
                         <a href="{{ route('leads.index') }}" class="nav-link">
