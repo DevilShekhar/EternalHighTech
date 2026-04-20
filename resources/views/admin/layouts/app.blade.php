@@ -269,15 +269,17 @@
                            <li><a class="nav-link" href="{{ route('blogs.create') }}">Add New Blog</a></li>
                         </ul>
                      </li>
-                     <li class="dropdown">
-                     <a href="#" class="menu-toggle nav-link has-dropdown">
-                        <i data-feather="grid"></i><span>Services</span>
-                     </a>
-                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="{{ route('service-category.index') }}">All Category</a></li>
-                        <li><a class="nav-link" href="{{ route('service-category.create') }}">Add Category</a></li>
-                     </ul>
-                  </li>
+                   <li class="dropdown">
+                        <a href="#" class="menu-toggle nav-link has-dropdown">
+                           <i data-feather="grid"></i><span>Services</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                           <li><a class="nav-link" href="{{ route('service-category.index') }}">All Category</a></li>
+                           <li><a class="nav-link" href="{{ route('service-category.create') }}">Add Category</a></li>
+                           <li><a class="nav-link" href="{{ route('services.index') }}">All Services</a></li>
+                           <li><a class="nav-link" href="{{ route('services.create') }}">Add Services</a></li>
+                        </ul>
+                     </li>
                      <li class="dropdown">
                            <a href="#" class="menu-toggle nav-link has-dropdown">
                               <i data-feather="grid"></i><span>Portfolio</span>
@@ -287,15 +289,15 @@
                               <li><a class="nav-link" href="{{ route('portfolios.create') }}">Add New Portfolio</a></li>
                            </ul>
                         </li>
-                     <li class="dropdown">
-                        <a href="#" class="menu-toggle nav-link has-dropdown">
-                        <i data-feather="grid"></i><span>Career</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                           <li><a class="nav-link" href="basic-table.html">All Career</a></li>
-                           <li><a class="nav-link" href="advance-table.html">Add New Career</a></li>
-                        </ul>
-                     </li>
+                   <li class="dropdown">
+                     <a href="#" class="menu-toggle nav-link has-dropdown">
+                        <i data-feather="briefcase"></i><span>Career</span>
+                     </a>
+                     <ul class="dropdown-menu">
+                        <li><a class="nav-link" href="{{ route('career.index') }}">All Career</a></li>
+                        <li><a class="nav-link" href="{{ route('career.create') }}">Add Career</a></li>
+                     </ul>
+                  </li>
                     
                      <li class="dropdown {{ request()->routeIs('testimonial.*') ? 'active' : '' }}">
                         <a href="#" class="menu-toggle nav-link has-dropdown">

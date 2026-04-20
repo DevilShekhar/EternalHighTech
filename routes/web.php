@@ -5,7 +5,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ServiceCategoryController;
-
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\CareerController;
 use App\Http\Controllers\TestimonialController;
@@ -34,6 +34,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/check-lead', [LeadController::class, 'checkLead']);
     Route::post('/accept-lead/{id}', [LeadController::class, 'acceptLead']);
     Route::post('/skip-lead/{id}', [LeadController::class, 'skipLead']);
+    Route::resource('services', ServiceController::class);
     
      
     Route::resource('testimonial', TestimonialController::class); 
