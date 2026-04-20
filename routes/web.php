@@ -37,6 +37,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('services', ServiceController::class);
     
      
-    Route::resource('testimonial', TestimonialController::class); 
+    Route::resource('testimonial', TestimonialController::class);
+    Route::post('/leads/{id}/followup', [LeadsController::class, 'storeFollowup'])->name('leads.followup.store'); 
+    Route::get('/leads/{id}', [LeadsController::class, 'show'])->name('leads.show');
+    Route::get('/check-followups', [LeadsController::class, 'checkFollowups']);
 });
 
