@@ -31,15 +31,14 @@ class LeadController extends Controller
             'message' => 'nullable|string|max:1000',
         ]);
 
+        // 🌍 IP + Location
         $ip = $request->getClientIp();
-
         $location = [];
         $lat = null;
         $lng = null;
 
         try {
             if ($ip !== '127.0.0.1' && $ip !== '::1') {
-
                 $response = Http::timeout(3)->get("https://ipinfo.io/{$ip}/json");
 
                 if ($response->successful()) {
@@ -50,15 +49,31 @@ class LeadController extends Controller
                     }
                 }
             }
-        } catch (\Exception $e) {
-            $location = [];
+        } catch (\Exception $e) {}
+
+        // 🔥 GET USERS
+        $users = User::where('role', 'sales_executive')->orderBy('id')->get();
+
+        if ($users->isEmpty()) {
+            return back()->with('error', 'No sales users available');
         }
 
-        // ✅ CREATE LEAD (NO USER ASSIGN HERE)
+        // 🔥 FIND NEXT USER (ROUND ROBIN)
+        $lastLead = Lead::whereNotNull('user_id')->latest()->first();
+
+        if ($lastLead) {
+            $currentIndex = $users->search(fn($u) => $u->id == $lastLead->user_id);
+            $nextIndex = ($currentIndex + 1) % $users->count();
+        } else {
+            $nextIndex = 0;
+        }
+
+        $nextUser = $users[$nextIndex];
+
+        // ✅ CREATE LEAD (ASSIGNED)
         Lead::create([
-            'user_id' => null,
+            'user_id' => $nextUser->id,
             'status' => 'pending',
-            'current_user_index' => 0,
             'notified_at' => now(),
 
             'name' => trim($request->name),
@@ -84,65 +99,42 @@ class LeadController extends Controller
         return back()->with('success', 'Thank you! We will contact you soon.');
     }
 
-    //  CHECK LEAD (with logging)
+    // ✅ CHECK LEAD (ONLY ASSIGNED USER)
     public function checkLead()
     {
-        $lead = Lead::where('status', 'pending')->latest()->first();
+        if (!auth()->check()) {
+            return response()->json(null);
+        }
+
+        $lead = Lead::where('status', 'pending')
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->first();
 
         if (!$lead) {
             return response()->json(null);
         }
 
-        $users = User::where('role', 'sales_executive')->orderBy('id')->get();
+        // ✅ LOG VIEW
+        try {
+            $alreadyViewed = LeadLog::where([
+                'lead_id' => $lead->id,
+                'user_id' => auth()->id(),
+                'action' => 'viewed'
+            ])->exists();
 
-        if ($users->isEmpty()) {
-            return response()->json(null);
-        }
-
-        $totalUsers = $users->count();
-
-        // ⏱ AUTO ROTATE AFTER 5 MIN
-        if ($lead->notified_at && now()->diffInSeconds($lead->notified_at) >= 300) {
-
-            $lead->current_user_index++;
-
-            if ($lead->current_user_index >= $totalUsers) {
-                $lead->current_user_index = 0;
+            if (!$alreadyViewed) {
+                LeadLog::log($lead->id, auth()->id(), 'viewed');
             }
+        } catch (\Exception $e) {}
 
-            $lead->notified_at = now();
-            $lead->save();
-        }
-
-        $currentUser = $users[$lead->current_user_index] ?? null;
-
-        if ($currentUser && auth()->check() && auth()->id() == $currentUser->id) {
-
-            // ✅ SAFE LOGGING (ENUM FIXED → 'viewed')
-            try {
-                $alreadyViewed = LeadLog::where([
-                    'lead_id' => $lead->id,
-                    'user_id' => auth()->id(),
-                    'action' => 'viewed'
-                ])->exists();
-
-                if (!$alreadyViewed) {
-                    LeadLog::log($lead->id, auth()->id(), 'viewed');
-                }
-            } catch (\Exception $e) {
-                \Log::error('LeadLog error: ' . $e->getMessage());
-            }
-
-            return response()->json([
-                'id' => $lead->id,
-                'name' => $lead->name,
-                'phone' => $lead->phone,
-                'services' => $lead->services,
-                'budget' => $lead->budget,
-            ]);
-        }
-
-        return response()->json(null);
+        return response()->json([
+            'id' => $lead->id,
+            'name' => $lead->name,
+            'phone' => $lead->phone,
+            'services' => $lead->services,
+            'budget' => $lead->budget,
+        ]);
     }
 
     // ✅ ACCEPT LEAD
@@ -162,12 +154,10 @@ class LeadController extends Controller
         $lead->status = 'assigned';
         $lead->save();
 
-        // ✅ LOG ACCEPTED
+        // ✅ LOG
         try {
             LeadLog::log($lead->id, auth()->id(), 'accepted');
-        } catch (\Exception $e) {
-            \Log::error('LeadLog error: ' . $e->getMessage());
-        }
+        } catch (\Exception $e) {}
 
         return response()->json([
             'success' => true,
@@ -175,7 +165,7 @@ class LeadController extends Controller
         ]);
     }
 
-    // ✅ SKIP LEAD
+    // ✅ SKIP LEAD → NEXT USER
     public function skipLead($id)
     {
         $lead = Lead::find($id);
@@ -190,21 +180,20 @@ class LeadController extends Controller
             return response()->json(['error' => 'No users']);
         }
 
-        $lead->current_user_index++;
+        $currentIndex = $users->search(fn($u) => $u->id == $lead->user_id);
 
-        if ($lead->current_user_index >= $users->count()) {
-            $lead->current_user_index = 0;
-        }
+        $nextIndex = ($currentIndex + 1) % $users->count();
 
+        $nextUser = $users[$nextIndex];
+
+        $lead->user_id = $nextUser->id;
         $lead->notified_at = now();
         $lead->save();
 
-        // ✅ LOG SKIPPED
+        // ✅ LOG
         try {
             LeadLog::log($lead->id, auth()->id(), 'skipped');
-        } catch (\Exception $e) {
-            \Log::error('LeadLog error: ' . $e->getMessage());
-        }
+        } catch (\Exception $e) {}
 
         return response()->json(['success' => true]);
     }
