@@ -274,11 +274,32 @@
                         </ul>
                      </li>
                   @endif
-                     {{-- Leads --}}
-                     <li class="{{ request()->routeIs('leads.index') ? 'active' : '' }}">
-                        <a href="{{ route('leads.index') }}" class="nav-link">
-                              <i data-feather="grid"></i><span>Leads</span>
+                     {{-- Leads Dropdown --}}
+                     <li class="dropdown {{ request()->routeIs('leads.*') ? 'active' : '' }}">
+                        <a href="#" class="menu-toggle nav-link has-dropdown">
+                           <i data-feather="grid"></i><span>Leads</span>
                         </a>
+                        <ul class="dropdown-menu">
+                           <li class="{{ request()->routeIs('leads.index') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('leads.index') }}">All Leads</a>
+                           </li>
+
+                           <li class="{{ request()->routeIs('reminders.list') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('reminders.list') }}">Reminder Leads</a>
+                           </li>
+
+                           <li class="{{ request()->routeIs('completed.list') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('completed.list') }}">Completed Leads</a>
+                           </li>
+                            @if(auth()->check() && auth()->user()->role === 'admin')
+                           <li class="{{ request()->routeIs('filter.leads') ? 'active' : '' }}">
+                              <a class="nav-link" href="{{ route('filter.leads') }}">Filter Leads</a>
+                           </li>
+                           @endif
+                           <li class="{{ request()->routeIs('leads.inprogress') ? 'active' : '' }}">
+                              <a class="nav-link" href="{{ route('leads.inprogress') }}">Inprogress Leads</a>
+                           </li>
+                        </ul>
                      </li>
 
                      
@@ -323,7 +344,7 @@
          
          const leadSound = document.getElementById('leadSound');
          
-         // 🔓 UNLOCK AUDIO (browser requirement)
+         //  UNLOCK AUDIO (browser requirement)
          document.addEventListener('click', function () {
             leadSound.play().then(() => {
                leadSound.pause();
@@ -333,7 +354,7 @@
          
          setInterval(function () {
          
-            // ❌ do not run if popup already open
+            //  do not run if popup already open
             if (isPopupOpen) return;
          
             fetch('/check-lead', {
@@ -370,7 +391,7 @@
                      timer: 300000,
                      timerProgressBar: true,
          
-                     // 🔊 CONTINUOUS SOUND
+                     //  CONTINUOUS SOUND
                      didOpen: () => {
          
                         leadSound.loop = true; // 🔁 repeat forever
@@ -382,7 +403,7 @@
                      }
                }).then((result) => {
          
-                     // 🛑 STOP SOUND COMPLETELY
+                     //  STOP SOUND COMPLETELY
                      leadSound.pause();
                      leadSound.currentTime = 0;
                      leadSound.loop = false;
@@ -408,15 +429,21 @@
                                  Swal.fire({
                                     icon: 'success',
                                     title: 'Assigned!',
-                                    text: 'Lead assigned to you.'
+                                    text: 'Lead assigned to you.',
+                                    timer: 1500,
+                                    showConfirmButton: false,
+                                    willClose: () => {
+                                          //  REDIRECT ADDED
+                                          window.location.href = '/leads';
+                                    }
                                  });
-                           } else {
+                              } else {
                                  Swal.fire({
                                     icon: 'error',
                                     title: 'Error',
                                     text: res.error || 'Already assigned'
                                  });
-                           }
+                              }
          
                         })
                         .catch(err => console.error(err));

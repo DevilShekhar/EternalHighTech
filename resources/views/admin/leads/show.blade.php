@@ -5,32 +5,79 @@
 <div class="container">
 
     <!-- 🔹 Lead Header -->
-    <div class="card shadow-sm mb-4 p-3">
-        <div class="d-flex justify-content-between align-items-center">
-            <div>
-                <h4 class="mb-1">{{ $lead->name }}</h4>
-                <small class="text-muted">
-                    {{ $lead->email }} | {{ $lead->phone }}
-                </small>
-            </div>
+    <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>Lead Details</h4>
 
-            <div>
-                <span class="badge bg-success px-3 py-2">
+                <span class="badge badge-success">
                     {{ ucfirst($lead->status) }}
                 </span>
             </div>
-        </div>
-    </div>
 
-    <!-- 🔹 Action Button -->
-    <div class="mb-3 text-end">
-   
-        <button class="btn btn-primary"
-        data-toggle="modal"
-        data-target="#exampleModal">
-    + Add Follow-up
-</button>
-    </div>
+            <div class="card-body">
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <strong>Name:</strong>
+                        <p>{{ $lead->name }}</p>
+                    </div>
+
+                    <div class="col-md-3">
+                        <strong>Email:</strong>
+                        <p>{{ $lead->email ?? 'N/A' }}</p>
+                    </div>
+
+                    <div class="col-md-3">
+                        <strong>Phone:</strong>
+                        <p>{{ $lead->phone ?? 'N/A' }}</p>
+                    </div>
+                    @if(Auth::user()->role === 'admin')
+                        {{--  Show Sales Person ONLY ONCE --}}
+                        <div class="col-md-3">
+                            <strong>Sales Person:</strong>
+                            <p>{{ $lead->user->name ?? 'N/A' }}</p>
+                        </div>
+                    @endif
+
+                </div>
+            </div>
+        </div>
+      @if(Auth::user()->role === 'admin' && !empty($leadLogs))
+            <div class="card mt-4">
+                <div class="row">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">                       
+                                <h4>Lead Logs</h4>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>                                       
+                                            <th>Action</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($leadLogs as $log)
+                                            <tr>
+                                                <td>{{ $log->id }}</td>                                          
+                                                <td>{{ $log->action }}</td>
+                                                <td>{{ $log->created_at }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>                      
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+    @if($lead->status !== 'closed')
+        <!-- 🔹 Action Button -->
+        <div class="mb-3 text-end">
+    
+            <button class="btn btn-primary"  data-toggle="modal"  data-target="#exampleModal"> + Add Follow-up </button>
+        </div>
+    @endif
 
     <!-- 🔹 Follow-up Timeline -->
     <div class="card p-3">
@@ -82,7 +129,7 @@
             <div class="modal-header">
                 <h5 class="modal-title">Add Follow-up</h5>
 
-                <!-- ✅ FIXED CLOSE BUTTON -->
+                <!--  FIXED CLOSE BUTTON -->
                 <button type="button" class="close" data-dismiss="modal">
                     <span>&times;</span>
                 </button>

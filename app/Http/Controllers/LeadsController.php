@@ -16,23 +16,58 @@ class LeadsController extends Controller
     public function index()
     {
         if (Auth::user()->role === 'admin') {
-            $leads = Lead::latest()->get();
+
+            $leads = Lead::where('status', 'assigned') //   only assigned
+                ->latest()
+                ->get();
+
         } else {
-            $leads = Lead::where('user_id', Auth::id())->latest()->get();
+
+            $leads = Lead::where('user_id', Auth::id())
+                ->where('status', 'assigned') //   only assigned
+                ->latest()
+                ->get();
         }
 
         return view('admin.leads.index', compact('leads'));
     }
+    public function inprogress()
+    {
+        $statuses = ['contacted', 'interested'];
+
+        if (Auth::user()->role === 'admin') {
+
+            $leads = Lead::whereIn('status', $statuses)
+                ->latest()
+                ->get();
+
+        } else {
+
+            $leads = Lead::where('user_id', Auth::id())
+                ->whereIn('status', $statuses)
+                ->latest()
+                ->get();
+        }
+
+        return view('admin.leads.inprogress', compact('leads'));
+    }
     public function show($id)
     {
+        $user = Auth::user();
         $lead = Lead::with('followups.user')->findOrFail($id);
 
         // security check (sales should see only their leads)
         if (Auth::user()->role !== 'admin' && $lead->user_id !== Auth::id()) {
             abort(403);
         }
-
-        return view('admin.leads.show', compact('lead'));
+        $leadLogs = [];
+            if ($user->role === 'admin') {
+                $leadLogs = \DB::table('lead_logs')
+                    ->where('lead_id', $id)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+            }
+        return view('admin.leads.show', compact('lead','leadLogs'));
     }
     public function storeFollowup(Request $request, $leadId)
     {
@@ -45,12 +80,12 @@ class LeadsController extends Controller
 
         $lead = Lead::findOrFail($leadId);
 
-        // 🔐 Security check
+        //  Security check
         if (Auth::user()->role !== 'admin' && $lead->user_id !== Auth::id()) {
             abort(403);
         }
 
-        // ✅ Convert datetime properly
+        // Convert datetime properly
         $nextFollowup = $request->filled('next_followup_date')
     ? Carbon::parse($request->next_followup_date)
     : null;
@@ -64,7 +99,7 @@ class LeadsController extends Controller
             'next_followup_date' => $nextFollowup,
         ]);
 
-        // ✅ Update lead status
+        // Update lead status
         $lead->update([
             'status' => $request->status
         ]);
@@ -103,4 +138,39 @@ class LeadsController extends Controller
 
         return response()->json(['status' => false]);
     }
+    public function filterList(Request $request)
+    {
+        $query = Lead::with('user'); //  relationship load
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('from_date')) {
+            $query->whereDate('created_at', '>=', $request->from_date);
+        }
+
+        if ($request->filled('to_date')) {
+            $query->whereDate('created_at', '<=', $request->to_date);
+        }
+
+        //  filter by sales executive
+        if ($request->filled('user_id')) {
+            $query->where('user_id', $request->user_id);
+        }
+
+        $leads = $query->latest()->get();
+
+        //  get all sales executives
+        $salesExecutives = \App\Models\User::where('role', 'sales_executive')->get();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'leads' => $leads
+            ]);
+        }
+
+        return view('admin.leads.allleads', compact('leads', 'salesExecutives'));
+    }
+    
 }

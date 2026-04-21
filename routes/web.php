@@ -9,6 +9,8 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\CareerController;
 use App\Http\Controllers\TestimonialController;
+use App\Http\Controllers\ReminderController;
+use App\Http\Controllers\CompleteLeadController;
 use App\Http\Controllers\Frontend\HomeFrontController;
 use App\Http\Controllers\Frontend\LeadController;
 
@@ -39,7 +41,11 @@ Route::middleware(['auth'])->group(function () {
      
     Route::resource('testimonial', TestimonialController::class);
     Route::post('/leads/{id}/followup', [LeadsController::class, 'storeFollowup'])->name('leads.followup.store'); 
-    Route::get('/leads/{id}', [LeadsController::class, 'show'])->name('leads.show');
     Route::get('/check-followups', [LeadsController::class, 'checkFollowups']);
+    Route::get('/reminders', [ReminderController::class, 'index'])->name('reminders.list');
+    Route::get('/completed', [CompleteLeadController::class, 'index'])->name('completed.list');
+    Route::get('/completed/{id}', [CompleteLeadController::class, 'show'])->name('completed.show');
+    Route::get('/filter-leads', [LeadsController::class, 'filterList'])->name('filter.leads');
+    Route::get('/leads-inprogress', [LeadsController::class, 'inprogress'])->name('leads.inprogress');
 });
 
