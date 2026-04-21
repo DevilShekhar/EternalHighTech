@@ -86,7 +86,7 @@
                     </div>
                 </div>
 
-                {{-- Dummy / Future (optional) --}}
+                {{-- Completed Leads --}}
                 <div class="col-xl-3 ">
                     <div class="card premium-top-card">
                         <div class="card-statistic-4">
@@ -94,7 +94,7 @@
                                 <div class="col-6 pt-3">
                                     <div class="card-content">
                                         <h5>Converted Leads</h5>
-                                        <h2 class="mb-3">{{ $convertedLeads ?? 0 }}</h2>
+                                        <h2 class="mb-3">{{ $completedLeads ?? 0 }}</h2>
                                         <p class="mb-0 text-muted">Coming soon</p>
                                     </div>
                                 </div>
@@ -168,8 +168,12 @@
       <div class="row">
           <div class="col-12">
               <div class="card">
-                  <div class="card-header">
+                  <div class="card-header d-flex justify-content-between align-items-center">
                       <h4>Lead Follow-up Reminders</h4>
+
+                      <a href="{{ route('reminders.list') }}" class="btn btn-primary">
+                          View All
+                      </a>
                   </div>
 
                   <div class="card-body p-0">
@@ -245,8 +249,12 @@
       <div class="row">
           <div class="col-12">
               <div class="card">
-                  <div class="card-header">
+                  <div class="card-header d-flex justify-content-between align-items-center">
                       <h4>Lead Follow-up Reminders</h4>
+
+                      <a href="{{ route('reminders.list') }}" class="btn btn-primary">
+                          View All
+                      </a>
                   </div>
 
                   <div class="card-body p-0">

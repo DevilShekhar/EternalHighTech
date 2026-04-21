@@ -25,14 +25,17 @@ class AdminDashboardController extends Controller
             $totalLeads = Lead::count();
             $todayLeads = Lead::whereDate('created_at', today())->count();
             $thisMonthLeads = Lead::whereMonth('created_at', now()->month)->count();
-
+            $completedLeads = Lead::where('status', 'closed')->count();
             $assignedLeads = Lead::count();
              // Admin → ALL reminders + sales user
             $reminders = LeadFollowup::with(['lead', 'user'])
-                ->whereDate('next_followup_date', '<=', Carbon::today())
-                ->orderBy('next_followup_date', 'asc')
-                ->take(10)
-                ->get();
+            ->whereDate('next_followup_date', '<=', Carbon::today())
+            ->whereHas('lead', function ($q) {
+                $q->whereNotIn('status', ['closed', 'not_interested']);
+            })
+            ->orderBy('next_followup_date', 'asc')
+            ->take(10)
+            ->get();
             // Admin → all closed leads + sales user
             $closedLeads = LeadFollowup::with(['lead', 'user'])
                 ->where('status', 'closed')
@@ -50,17 +53,18 @@ class AdminDashboardController extends Controller
 
             // Sales Executive → ONLY OWN leads
             $totalLeads = Lead::where('user_id', $user->id)->count();
-            $todayLeads = Lead::where('user_id', $user->id)
-                ->whereDate('created_at', today())->count();
+            $todayLeads = Lead::where('user_id', $user->id)->whereDate('created_at', today())->count();
 
-            $thisMonthLeads = Lead::where('user_id', $user->id)
-                ->whereMonth('created_at', now()->month)->count();
-
+            $thisMonthLeads = Lead::where('user_id', $user->id)->whereMonth('created_at', now()->month)->count();
+            $completedLeads = Lead::where('user_id', $user->id)->where('status', 'closed')->count();
             $assignedLeads = Lead::where('user_id', $user->id)->count();
              // Sales → ONLY own reminders
             $reminders = LeadFollowup::with('lead')
                 ->where('user_id', $user->id)
                 ->whereDate('next_followup_date', '<=', Carbon::today())
+                ->whereHas('lead', function ($q) {
+                    $q->whereNotIn('status', ['closed', 'not_interested']);
+                })
                 ->orderBy('next_followup_date', 'asc')
                 ->take(10)
                 ->get();
@@ -102,7 +106,8 @@ class AdminDashboardController extends Controller
             'activities',
             'reminders',
             'closedLeads',
-            'notinLeads'
+            'notinLeads',
+            'completedLeads'
         ));
         
     }
