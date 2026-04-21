@@ -13,6 +13,8 @@ use App\Http\Controllers\ReminderController;
 use App\Http\Controllers\CompleteLeadController;
 use App\Http\Controllers\Frontend\HomeFrontController;
 use App\Http\Controllers\Frontend\LeadController;
+use App\Http\Controllers\HomeBannerController;  
+use App\Http\Controllers\Auth\ForgotPasswordOtpController;
 
 
 use App\Http\Controllers\LeadsController;
@@ -42,10 +44,14 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('testimonial', TestimonialController::class);
     Route::post('/leads/{id}/followup', [LeadsController::class, 'storeFollowup'])->name('leads.followup.store'); 
     Route::get('/check-followups', [LeadsController::class, 'checkFollowups']);
+
     Route::get('/reminders', [ReminderController::class, 'index'])->name('reminders.list');
     Route::get('/completed', [CompleteLeadController::class, 'index'])->name('completed.list');
     Route::get('/completed/{id}', [CompleteLeadController::class, 'show'])->name('completed.show');
     Route::get('/filter-leads', [LeadsController::class, 'filterList'])->name('filter.leads');
     Route::get('/leads-inprogress', [LeadsController::class, 'inprogress'])->name('leads.inprogress');
+    Route::resource('home-banner', HomeBannerController::class);
+
+ 
 });
 

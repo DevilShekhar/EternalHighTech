@@ -28,11 +28,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            @if(session('success'))
-                                <div class="alert alert-success">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
+                            
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover" id="tableExport" style="width:100%;">
                                     <thead>
@@ -90,15 +86,10 @@
                                                     </a>
 
                                                     <form action="{{ route('testimonial.destroy', $testimonial->id) }}"
-                                                        method="POST"
-                                                        style="display:inline-block;"
-                                                        onsubmit="return confirm('Are you sure you want to delete this testimonial?')">
+                                                        method="POST" class="delete-form">
                                                         @csrf
                                                         @method('DELETE')
-
-                                                        <button type="submit" class="btn btn-sm btn-danger">
-                                                            Delete
-                                                        </button>
+                                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -119,4 +110,40 @@
 @else
     @php abort(403); @endphp
 @endif
+ @if(session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: '{{ session('success') }}',
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteForms = document.querySelectorAll('.delete-form');
+
+        deleteForms.forEach(function (form) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
 @endsection

@@ -23,6 +23,7 @@
       <link rel="stylesheet" href="{{ asset('assets/css/components.css') }}">
       <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
       <link rel="stylesheet" href="{{ asset('assets/bundles/summernote/summernote-bs4.css') }}">
+      @yield('style')
 
    </head>
    <body>
@@ -193,6 +194,21 @@
                         </ul>
                      </li>
 
+                     {{-- Home Banner --}}
+                     <li class="dropdown {{ request()->routeIs('home-banner.*') ? 'active' : '' }}">
+                        <a href="#" class="menu-toggle nav-link has-dropdown">
+                           <i data-feather="home"></i><span>HOME</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                           <li class="{{ request()->routeIs('home-banner.index') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('home-banner.index') }}">All</a>
+                           </li>
+                           <li class="{{ request()->routeIs('home-banner.create') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('home-banner.create') }}">Add</a>
+                           </li>
+                        </ul>
+                     </li>
+                     
                      {{-- Blogs --}}
                      <li class="dropdown {{ request()->routeIs('blogs.*') ? 'active' : '' }}">
                         <a href="#" class="menu-toggle nav-link has-dropdown">
