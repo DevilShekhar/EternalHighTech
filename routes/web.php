@@ -11,6 +11,8 @@ use App\Http\Controllers\CareerController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\Frontend\HomeFrontController;
 use App\Http\Controllers\Frontend\LeadController;
+use App\Http\Controllers\HomeBannerController;  
+use App\Http\Controllers\Auth\ForgotPasswordOtpController;
 
 
 use App\Http\Controllers\LeadsController;
@@ -41,5 +43,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/leads/{id}/followup', [LeadsController::class, 'storeFollowup'])->name('leads.followup.store'); 
     Route::get('/leads/{id}', [LeadsController::class, 'show'])->name('leads.show');
     Route::get('/check-followups', [LeadsController::class, 'checkFollowups']);
+    Route::resource('home-banner', HomeBannerController::class);
+
+ 
 });
 

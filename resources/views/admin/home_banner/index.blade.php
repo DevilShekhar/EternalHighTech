@@ -1,62 +1,56 @@
 @extends('admin.layouts.app')
 
 @section('content')
-@if(auth()->check() && auth()->user()->role === 'admin')
 <section class="section">
-    <div class="section-header">
-        <h1>Portfolio List</h1>
+    <div class="section-header d-flex justify-content-between align-items-center">
+        <h1>All Home Banner</h1>
+        <a href="{{ route('home-banner.create') }}" class="btn btn-primary">Add Home Banner</a>
     </div>
 
     <div class="section-body">
-       
-
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h4>All Portfolio Case Studies</h4>
-                <a href="{{ route('portfolios.create') }}" class="btn btn-primary">Add New Portfolio</a>
-            </div>
-
             <div class="card-body">
+
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover">
+                    <table class="table table-striped table-hover" id="tableExport">
                         <thead>
                             <tr>
                                 <th>Sr No</th>
                                 <th>Image</th>
                                 <th>Heading</th>
-                                <th>Sub Heading</th>
-                                <th>Link One</th>
-                                <th>Performance Title</th>
-                                <th>Client Heading</th>
+                                <th>Short Description</th>
+                                <th>Status</th>
+                                <th>Created By</th>
+                                <th>Updated By</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($portfolios as $key => $portfolio)
+                            @forelse($homeBanners as $key => $banner)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>
-                                        @if($portfolio->image)
-                                            <img src="{{ asset('storage/' . $portfolio->image) }}" width="70" style="border-radius:8px;">
+                                        @if($banner->image)
+                                            <img src="{{ asset('uploads/home_banners/' . $banner->image) }}" width="80" height="60" style="object-fit:cover; border-radius:6px;">
                                         @else
-                                            No Image
+                                            N/A
                                         @endif
                                     </td>
-                                    <td>{{ $portfolio->heading ?? '-' }}</td>
-                                    <td>{{ $portfolio->sub_heading ?? '-' }}</td>
+                                    <td>{{ $banner->heading }}</td>
+                                    <td>{{ \Illuminate\Support\Str::limit($banner->short_description, 60) }}</td>
                                     <td>
-                                        @if($portfolio->link_one)
-                                            <a href="{{ $portfolio->link_one }}" target="_blank">View Link</a>
+                                        @if($banner->status == 1)
+                                            <span class="badge bg-success">Active</span>
                                         @else
-                                            -
+                                            <span class="badge bg-danger">Inactive</span>
                                         @endif
                                     </td>
-                                    <td>{{ $portfolio->meta_ads_title ?? '-' }}</td>
-                                    <td>{{ $portfolio->feedback_heading ?? '-' }}</td>
-                                    <td>
-                                        <a href="{{ route('portfolios.edit', $portfolio->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    <td>{{ $banner->creator->name ?? 'N/A' }}</td>
+                                    <td>{{ $banner->updater->name ?? 'N/A' }}</td>
+                                    <td class="d-flex gap-2">
+                                        <a href="{{ route('home-banner.edit', $banner->id) }}" class="btn btn-sm btn-info">Edit</a>
 
-                                        <form action="{{ route('portfolios.destroy', $portfolio->id) }}"  method="POST" class="delete-form">
+                                        <form action="{{ route('home-banner.destroy', $banner->id) }}" method="POST" class="delete-form">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">Delete</button>
@@ -65,19 +59,17 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8" class="text-center">No portfolio records found.</td>
+                                    <td colspan="8" class="text-center">No records found</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
+
             </div>
         </div>
     </div>
 </section>
-@else
-    @php abort(403); @endphp
-@endif
  @if(session('success'))
 <script>
     Swal.fire({
