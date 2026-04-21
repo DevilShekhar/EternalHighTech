@@ -40,15 +40,20 @@ class LeadsController extends Controller
             'action_type' => 'required',
             'status' => 'required',
             'note' => 'required',
-            'next_followup_date' => 'nullable|date'
+            'next_followup_date' => 'nullable|date',
         ]);
 
         $lead = Lead::findOrFail($leadId);
 
-        // security check
+        // 🔐 Security check
         if (Auth::user()->role !== 'admin' && $lead->user_id !== Auth::id()) {
             abort(403);
         }
+
+        // ✅ Convert datetime properly
+        $nextFollowup = $request->filled('next_followup_date')
+    ? Carbon::parse($request->next_followup_date)
+    : null;
 
         LeadFollowup::create([
             'lead_id' => $lead->id,
@@ -56,10 +61,10 @@ class LeadsController extends Controller
             'action_type' => $request->action_type,
             'status' => $request->status,
             'note' => $request->note,
-            'next_followup_date' => $request->next_followup_date,
+            'next_followup_date' => $nextFollowup,
         ]);
 
-        // update lead status also
+        // ✅ Update lead status
         $lead->update([
             'status' => $request->status
         ]);
