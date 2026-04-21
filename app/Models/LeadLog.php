@@ -16,7 +16,7 @@ class LeadLog extends Model
     ];
 
     /**
-     * ✅ Relationship: LeadLog belongs to Lead
+     * Relationship: LeadLog belongs to Lead
      */
     public function lead()
     {
@@ -24,7 +24,7 @@ class LeadLog extends Model
     }
 
     /**
-     * ✅ Relationship: LeadLog belongs to User
+     * Relationship: LeadLog belongs to User
      */
     public function user()
     {
@@ -32,7 +32,7 @@ class LeadLog extends Model
     }
 
     /**
-     * ✅ Optional helper (clean usage)
+     * Optional helper (clean usage)
      */
     public static function log($leadId, $userId, $action)
     {

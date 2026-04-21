@@ -6,30 +6,24 @@
 
 <div class="row">
     <div class="col-12">
-
         {{-- Lead Info --}}
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4>Lead Details</h4>
-
                 <span class="badge badge-success">
                     {{ ucfirst($lead->status) }}
                 </span>
             </div>
-
             <div class="card-body">
                 <div class="row">
-
                     <div class="col-md-3">
                         <strong>Name:</strong>
                         <p>{{ $lead->name }}</p>
                     </div>
-
                     <div class="col-md-3">
                         <strong>Email:</strong>
                         <p>{{ $lead->email ?? 'N/A' }}</p>
                     </div>
-
                     <div class="col-md-3">
                         <strong>Phone:</strong>
                         <p>{{ $lead->phone ?? 'N/A' }}</p>
@@ -41,7 +35,6 @@
                             <p>{{ $lead->user->name ?? 'N/A' }}</p>
                         </div>
                     @endif
-
                 </div>
             </div>
         </div>
@@ -79,12 +72,9 @@
             <div class="card-header">
                 <h4>Lead Activity History</h4>
             </div>
-
             <div class="card-body p-0">
                 <div class="table-responsive">
-
                     <table class="table table-striped">
-
                         <tr>
                             <th>#</th>
                             <th>Action</th>
@@ -93,7 +83,6 @@
                             <th>Priority</th>
                             <th>Remarks</th>
                         </tr>
-
                         @forelse($lead->followups as $key => $followup)
 
                         @php
@@ -104,20 +93,16 @@
 
                         <tr>
                             <td>{{ $key + 1 }}</td>
-
                             <td>{{ ucfirst($followup->action_type ?? '-') }}</td>
-
                             <td>
                                 <span class="badge 
                                     {{ $followup->status == 'closed' ? 'badge-success' : 'badge-info' }}">
                                     {{ ucfirst($followup->status) }}
                                 </span>
                             </td>
-
                             <td>
                                 {{ $date->format('d M Y, h:i A') }}
                             </td>
-
                             <td>
                                 @if($isOverdue)
                                     <span class="badge badge-danger">Overdue</span>
@@ -127,10 +112,8 @@
                                     <span class="badge badge-success">Upcoming</span>
                                 @endif
                             </td>
-
                             <td>{{ $followup->note ?? '-' }}</td>
                         </tr>
-
                         @empty
                         <tr>
                             <td colspan="6" class="text-center">
@@ -138,13 +121,10 @@
                             </td>
                         </tr>
                         @endforelse
-
                     </table>
-
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 

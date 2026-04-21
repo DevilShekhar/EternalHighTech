@@ -197,7 +197,7 @@
                      {{-- Home Banner --}}
                      <li class="dropdown {{ request()->routeIs('home-banner.*') ? 'active' : '' }}">
                         <a href="#" class="menu-toggle nav-link has-dropdown">
-                           <i data-feather="home"></i><span>HOME</span>
+                           <i data-feather="home"></i><span>Home Banner</span>
                         </a>
                         <ul class="dropdown-menu">
                            <li class="{{ request()->routeIs('home-banner.index') ? 'active' : '' }}">

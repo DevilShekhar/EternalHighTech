@@ -176,12 +176,12 @@ class ServiceController extends Controller
     }
 
    public function destroy($id)
-{
-    $service = Service::findOrFail($id);
+    {
+        $service = Service::findOrFail($id);
 
-    ServiceSection::where('service_id', $service->id)->delete();
-    $service->delete();
+        ServiceSection::where('service_id', $service->id)->delete();
+        $service->delete();
 
-    return redirect()->route('services.index')->with('success', 'Service deleted successfully.');
-}
+        return redirect()->route('services.index')->with('success', 'Service deleted successfully.');
+    }
 }
