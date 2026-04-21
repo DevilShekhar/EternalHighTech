@@ -15,7 +15,9 @@ class LeadFollowup extends Model
         'next_followup_date',
         'reminder_sent'
     ];
-
+    protected $casts = [
+        'next_followup_date' => 'datetime',
+    ];
     // relation: followup belongs to lead
     public function lead()
     {

@@ -59,10 +59,11 @@
 
                     <p class="mt-2 mb-1">{{ $f->note }}</p>
 
-                    <small class="text-muted">
-                      {{ \Carbon\Carbon::parse($f->next_followup_date)->format('d M Y, h:i A') }}
+                   <small class="text-muted">
+                        {{ $f->next_followup_date 
+                            ? \Carbon\Carbon::parse($f->next_followup_date)->format('d M Y, h:i A') 
+                            : 'No follow-up scheduled' }}
                     </small>
-
                 </div>
             </div>
         @empty
@@ -122,10 +123,10 @@
                         <!-- Next Follow-up -->
                         <div class="col-md-12 mb-3">
                             <label>Next Follow-up Date & Time</label>
-                            <input type="datetime-local"
-                                   name="next_followup_date"
-                                   class="form-control"
-                                   value="{{ now()->format('Y-m-d\TH:i') }}">
+                         <input type="datetime-local"
+       name="next_followup_date"
+       class="form-control"
+       value="{{ old('next_followup_date') }}">
                         </div>
 
                         <!-- Notes -->
