@@ -31,14 +31,13 @@
                         <strong>Phone:</strong>
                         <p>{{ $lead->phone ?? 'N/A' }}</p>
                     </div>
-                    @if(Auth::user()->role === 'admin')
+                    @if(Auth::user()->role === 'admin' || Auth::user()->role === 'sales_head')
                         {{--  Show Sales Person ONLY ONCE --}}
                         <div class="col-md-3">
                             <strong>Sales Person:</strong>
                             <p>{{ $lead->user->name ?? 'N/A' }}</p>
                         </div>
                     @endif
-
                 </div>
             </div>
         </div>

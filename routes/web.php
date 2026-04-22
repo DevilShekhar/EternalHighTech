@@ -59,6 +59,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/filter-leads', [LeadsController::class, 'filterList'])->name('filter.leads');
     Route::get('/leads-inprogress', [LeadsController::class, 'inprogress'])->name('leads.inprogress');
     Route::resource('home-banner', HomeBannerController::class);
+    
 
  
 });

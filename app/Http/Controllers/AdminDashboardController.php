@@ -19,7 +19,7 @@ class AdminDashboardController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role === 'admin') {
+        if ($user->role === 'admin'  || $user->role === 'sales_head') {
 
             // Admin → ALL leads
             $totalLeads = Lead::count();
