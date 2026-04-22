@@ -1,6 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
+@if(auth()->check() && auth()->user()->role === 'admin')
 <section class="section">
     <div class="section-header">
         <h1>Edit Portfolio Case Study</h1>
@@ -257,4 +258,7 @@
         showStep(currentStep);
     });
 </script>
+@else
+    @php abort(403); @endphp
+@endif
 @endsection

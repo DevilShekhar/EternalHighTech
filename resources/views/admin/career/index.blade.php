@@ -1,17 +1,14 @@
 @extends('admin.layouts.app')
 
 @section('content')
+@if(auth()->check() && auth()->user()->role === 'admin')
 <section class="section">
     <div class="section-header">
         <h1>Career List</h1>
     </div>
 
     <div class="section-body">
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+        
 
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -66,13 +63,10 @@
                                     <td>
                                         <a href="{{ route('career.edit', $career->id) }}" class="btn btn-warning btn-sm">Edit</a>
 
-                                        <form action="{{ route('career.destroy', $career->id) }}" method="POST" style="display:inline-block;">
+                                        <form action="{{ route('career.destroy', $career->id) }}" method="POST"class="delete-form">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm"
-                                                onclick="return confirm('Are you sure you want to delete this career?')">
-                                                Delete
-                                            </button>
+                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -88,4 +82,44 @@
         </div>
     </div>
 </section>
+
+@else
+    @php abort(403); @endphp
+@endif
+ @if(session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: '{{ session('success') }}',
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteForms = document.querySelectorAll('.delete-form');
+
+        deleteForms.forEach(function (form) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
 @endsection

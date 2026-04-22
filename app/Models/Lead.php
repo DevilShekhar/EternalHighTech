@@ -38,4 +38,8 @@ class Lead extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function followups()
+    {
+        return $this->hasMany(LeadFollowup::class);
+    }
 }

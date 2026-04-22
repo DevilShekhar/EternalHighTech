@@ -1,6 +1,8 @@
 @extends('admin.layouts.app')
 
 @section('content')
+@if(auth()->check() && auth()->user()->role === 'admin')
+
     <section class="section premium-dashboard">
         <div class="premium-page-head">
             <div class="premium-page-title">
@@ -27,11 +29,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            @if(session('success'))
-                                <div class="alert alert-success">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
+                           
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover" id="tableExport" style="width:100%;">
                                     <thead>
@@ -74,10 +72,10 @@
                                                 <td>
                                                     <div class="btn-group" role="group">
                                                         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary">Edit</a>
-                                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display: inline;">
+                                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="delete-form">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
+                                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                                         </form>
                                                     </div>
                                                 </td>
@@ -96,4 +94,43 @@
             </div>
         </div>
     </section>
+@else
+    @php abort(403); @endphp
+@endif
+ @if(session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: '{{ session('success') }}',
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteForms = document.querySelectorAll('.delete-form');
+
+        deleteForms.forEach(function (form) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
 @endsection

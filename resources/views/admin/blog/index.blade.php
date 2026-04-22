@@ -1,8 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
-
-
+@if(auth()->check() && auth()->user()->role === 'admin')
 <section class="section">
     <div class="section-body">
         <div class="card premium-card">
@@ -18,10 +17,7 @@
             </div>
 
             <div class="card-body">
-                @if(session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
-                @endif
-
+               
                 <div class="table-responsive premium-table-wrap">
                     <table class="table table-striped table-hover align-middle premium-table" id="tableExport">
                         <thead>
@@ -58,13 +54,11 @@
                                             Edit
                                         </a>
 
-                                        <form action="{{ route('blogs.destroy', $blog->id) }}" method="POST" class="m-0">
+                                        <form action="{{ route('blogs.destroy', $blog->id) }}" method="POST" class="delete-form">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm"
-                                                onclick="return confirm('Are you sure you want to delete this blog?')">
-                                                Delete
-                                            </button>
+                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
                                         </form>
                                     </div>
                                 </td>
@@ -120,6 +114,45 @@
         $('#tableExport').on('draw.dt init.dt', function () {
             $('#tableExport_filter').css({'float': 'right', 'text-align': 'right'});
             $('#tableExport_wrapper .row:last-of-type').css({'display': 'flex', 'flex-direction': 'column', 'align-items': 'flex-end'});
+        });
+    });
+</script>
+@else
+    @php abort(403); @endphp
+@endif
+@if(session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: '{{ session('success') }}',
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteForms = document.querySelectorAll('.delete-form');
+
+        deleteForms.forEach(function (form) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
         });
     });
 </script>
