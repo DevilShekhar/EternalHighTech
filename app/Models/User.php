@@ -13,13 +13,10 @@ class User extends Authenticatable
    protected $fillable = [
     'name',
     'email',
-    'mobile_number',
-    'gender',
-    'role',
-    'date_of_birth',
-    'address',
     'password',
-    'profile_photo',
+    'otp_code',
+    'otp_expires_at',
+    'is_otp_verified',
 ];
 
     protected $hidden = [
