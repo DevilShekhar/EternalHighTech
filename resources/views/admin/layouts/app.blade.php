@@ -307,7 +307,7 @@
                            <li class="{{ request()->routeIs('completed.list') ? 'active' : '' }}">
                                  <a class="nav-link" href="{{ route('completed.list') }}">Completed Leads</a>
                            </li>
-                            @if(auth()->check() && auth()->user()->role === 'admin')
+                           @if(auth()->check() && (auth()->user()->role === 'admin' || auth()->user()->role === 'sales_head'))
                            <li class="{{ request()->routeIs('filter.leads') ? 'active' : '' }}">
                               <a class="nav-link" href="{{ route('filter.leads') }}">Filter Leads</a>
                            </li>

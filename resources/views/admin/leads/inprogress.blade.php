@@ -8,7 +8,29 @@
             <h2>All Leads</h2>
             <p>Manage all leads with premium table layout.</p>
         </div>
+        <!-- Filter Buttons -->
+        <div class="buttons d-flex flex-wrap gap-2 mt-3">
+
+            <a href="{{ route('leads.index') }}" class="btn btn-secondary">
+                 All Leads
+            </a>
+          
+            <a href="{{ route('leads.inprogress') }}" class="btn btn-warning">
+                In Progress
+            </a>
+            <a href="{{ route('reminders.list') }}" class="btn btn-info">
+                 Reminder
+            </a>
+            <a href="{{ route('completed.list') }}" class="btn btn-success">
+                 Completed
+            </a>
+
+            <a href="#" class="btn btn-danger">
+                Junk
+            </a>
+        </div>
     </div>
+    
 </section>
 
 <section class="section premium-dashboard pt-0">

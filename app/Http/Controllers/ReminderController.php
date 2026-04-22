@@ -16,7 +16,7 @@ class ReminderController extends Controller
 {
     $user = Auth::user();
 
-    if ($user->role === 'admin') {
+    if ($user->role === 'admin' || $user->role === 'sales_head') {
         $reminders = LeadFollowup::with(['lead', 'user'])
             ->whereHas('lead', function ($query) {
                 $query->where('status', '!=', 'closed');
