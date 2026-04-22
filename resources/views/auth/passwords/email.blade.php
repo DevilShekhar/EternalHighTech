@@ -1,47 +1,69 @@
 @extends('layouts.app')
 
+@section('body-class', 'elite-login-body')
+
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+<div class="elite-login-page">
 
-                    <form method="POST" action="{{ route('password.email') }}">
-                        @csrf
+    <div class="elite-bg-shape shape-one"></div>
+    <div class="elite-bg-shape shape-two"></div>
 
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+    <section class="elite-login-section">
+        <div class="" style="max-width:500px; margin-top: 70px">
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+            <div class="elite-form-box">
 
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Send Password Reset Link') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                <div class="elite-form-head text-center">
+                    <h2>Forgot Password</h2>
+                    <p>We will send a link to reset your password</p>
                 </div>
+
+                {{-- SUCCESS MESSAGE --}}
+                @if (session('status'))
+                    <div class="alert alert-success text-center">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ url('/forgot-password') }}">
+                  @csrf
+
+                    {{-- EMAIL --}}
+                    <div class="elite-field">
+                        <label>Email</label>
+
+                        <div class="elite-input-wrap">
+                            <i class="fa-regular fa-envelope elite-input-icon"></i>
+
+                            <input type="email"
+                                   name="email"
+                                   value="{{ old('email') }}"
+                                   required
+                                   autofocus
+                                   placeholder="Enter your email"
+                                   class="elite-input form-control @error('email') is-invalid @enderror">
+                        </div>
+
+                        @error('email')
+                        <span class="invalid-feedback d-block">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+
+                    {{-- BUTTON --}}
+                    <button type="submit" class="btn elite-login-btn w-100 mt-3">
+                        Forgot Password
+                    </button>
+
+                </form>
+
             </div>
+
         </div>
-    </div>
+    </section>
+
 </div>
+
 @endsection

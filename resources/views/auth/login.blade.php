@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 {{-- IMPORTANT: add body class for background --}}
-@section('body-class', 'elite-login-body')
+@section('body-class', 'elite-login-body login-page')
 
 @section('content')
 
@@ -69,6 +69,11 @@
               <p>Please enter your credentials to continue</p>
             </div>
 
+            @if (session('status'))
+                <div class="alert alert-success text-center">
+                    {{ session('status') }}
+                </div>
+            @endif
             <form method="POST" action="{{ route('login') }}">
               @csrf
 
