@@ -10746,6 +10746,7 @@ body.elite-login-body {
 .elite-login-left h1 {
     font-size: 32px;
     margin-bottom: 10px;
+    color: #fff;
 }
 
 .elite-login-left p {
@@ -10986,4 +10987,179 @@ body.otp-page {
     transform: translateY(-50%);
     cursor: pointer;
     color: #aaa;
+}
+
+/*  */
+/* ===== User Profile Page ===== */
+
+body {
+    background: #f4f6f9;
+    font-family: 'Poppins', sans-serif;
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+/* Profile Card */
+/* Profile Card */
+.profile-card {
+    background: #fff;
+    max-width: 600px;
+    margin: 80px auto;
+    padding: 80px 30px 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    text-align: center;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Hover Effect */
+.profile-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.15);
+}
+
+/* Floating Image Wrapper */
+.profile-img-wrapper {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Profile Image */
+.profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #fff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    background: #fff;
+}
+
+/* Heading */
+.profile-card h1 {
+    margin-top: 30px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #222;
+}
+
+/*  */
+/* Heading */
+.profile-card h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #222;
+}
+
+/* Success message */
+.profile-card p {
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+/* Labels */
+.profile-card label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #444;
+    text-align: left;
+}
+
+/* Inputs (apply to all inputs inside form) */
+.profile-card input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+    font-size: 14px;
+    outline: none;
+    transition: 0.3s;
+}
+
+/* Focus effect */
+.profile-card input:focus {
+    border-color: #6c5ce7;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(108,92,231,0.1);
+}
+
+/* Button */
+.profile-card button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+/* Button hover */
+.profile-card button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(108,92,231,0.3);
+}
+
+/* Optional label style override for your first input class */
+.form-group-label {
+    color: #444;
+}
+
+/* Optional premium input override */
+.premium-input {
+    background: #f9f9f9;
+}
+
+/* Profile Info Text */
+.profile-card p {
+    text-align: left;
+    font-size: 15px;
+    margin: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 8px;
+    color: #444;
+}
+
+/* Labels */
+.profile-card p strong {
+    display: inline-block;
+    width: 130px;
+    color: #111;
+    font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+    .profile-card {
+        margin: 20px;
+        padding: 70px 20px 20px;
+    }
+
+    .profile-card h1 {
+        font-size: 20px;
+    }
+
+    .profile-card p strong {
+        width: 110px;
+    }
 }
