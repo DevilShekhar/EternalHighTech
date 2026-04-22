@@ -134,7 +134,7 @@
                         <div class="dropdown-title">
                            Role {{ Auth::user()->role }}
                         </div>
-                        <a href="profile.html" class="dropdown-item has-icon">
+                        <a href="{{ route('users.profile', auth()->user()->id) }}" class="dropdown-item has-icon">
                         <i class="far fa-user"></i> Profile
                         </a>
                         <a href="timeline.html" class="dropdown-item has-icon">

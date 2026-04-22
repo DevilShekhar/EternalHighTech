@@ -19,6 +19,7 @@ use App\Http\Controllers\Auth\ForgotPasswordOtpController;
 
 use App\Http\Controllers\LeadsController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', [HomeFrontController::class, 'index'])->name('home');
 Route::get('lead/eternal', [LeadController::class, 'create'])->name('lead.form');
@@ -60,7 +61,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/leads-inprogress', [LeadsController::class, 'inprogress'])->name('leads.inprogress');
     Route::resource('home-banner', HomeBannerController::class);
 
+    Route::get('/users/{id}/profile', [UserController::class, 'show'])->name('users.profile');
  
+    Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
 });
 
 
