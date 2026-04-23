@@ -11163,3 +11163,17 @@ h1 {
         width: 110px;
     }
 }
+
+/* eye icon for profile change password */
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 38px;
+    cursor: pointer;
+    color: #888;
+    font-size: 16px;
+}
+
+.toggle-password:hover {
+    color: #6c5ce7;
+}

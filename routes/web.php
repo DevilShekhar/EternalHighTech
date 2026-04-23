@@ -66,6 +66,10 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/change-password', [ProfileController::class, 'showVerifyPassword'])->name('password.verify');
+    Route::post('/verify-password', [ProfileController::class, 'verifyPassword'])->name('password.verify.post');
+    Route::get('/new-password', [ProfileController::class, 'showNewPassword'])->name('password.new');
+    Route::post('/update-password', [ProfileController::class, 'updateNewPassword'])->name('password.update');
 });
 });
 
