@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 
 class ServiceController extends Controller
 {
-    public function index()
+   public function index()
     {
         $services = Service::with(['category', 'creator', 'updater'])->latest()->get();
         return view('admin.services.index', compact('services'));
@@ -174,14 +174,14 @@ class ServiceController extends Controller
 
         return redirect()->route('services.index')->with('success', 'Service updated successfully.');
     }
-
-   public function destroy($id)
+    public function destroy($id)
     {
         $service = Service::findOrFail($id);
 
-        ServiceSection::where('service_id', $service->id)->delete();
-        $service->delete();
+        $service->update([
+            'status' => 'Inactive',
+            'updated_by' => Auth::id(),
+        ]);
 
-        return redirect()->route('services.index')->with('success', 'Service deleted successfully.');
-    }
+        return redirect()->route('services.index')->with('success', 'Service deactivated successfully.');  
 }

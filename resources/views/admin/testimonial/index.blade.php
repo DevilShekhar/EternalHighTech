@@ -69,8 +69,8 @@
                                                 <td>
                                                     {{ \Illuminate\Support\Str::limit($testimonial->description, 50) }}
                                                 </td>
-                                                <td>{{ $testimonial->created_by ?? 'N/A' }}</td>
-                                                <td>{{ $testimonial->updated_by ?? 'N/A' }}</td>
+                                                <td>{{ optional($testimonial->creator)->name ?? 'N/A' }}</td>
+                                              <td>{{ optional($testimonial->updater)->name ?? '' }}</td>
                                                 <td>{{ $testimonial->created_at->format('d M Y') }}</td>
                                                 <td>
                                                     @if($testimonial->status == 1)
@@ -80,19 +80,20 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('testimonial.edit', $testimonial->id) }}"
-                                                    class="btn btn-sm btn-info">
-                                                        Edit
-                                                    </a>
+                                                    <div class="d-flex align-items-center gap-2 flex-nowrap">
+                                                        <a href="{{ route('testimonial.edit', $testimonial->id) }}"
+                                                        class="btn btn-sm btn-info">
+                                                            Edit
+                                                        </a>
 
-                                                    <form action="{{ route('testimonial.destroy', $testimonial->id) }}"
-                                                        method="POST" class="delete-form">
+                                                    <form action="{{ route('testimonial.destroy', $testimonial->id) }}" method="POST" class="delete-form d-inline">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                                     </form>
-                                                </td>
-                                            </tr>
+                                                </div>
+                                            </td>
+                                        </tr>
                                         @empty
                                             <tr>
                                                 <td colspan="9" class="text-center">No Testimonials Found</td>

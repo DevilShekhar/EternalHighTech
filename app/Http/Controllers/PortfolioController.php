@@ -90,6 +90,7 @@ class PortfolioController extends Controller
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable',
             'meta_keyword' => 'nullable',
+            'status' => 'required|in:0,1',
         ]);
 
         $data = $request->except(['image', 'performance_image', 'feedback_image']);

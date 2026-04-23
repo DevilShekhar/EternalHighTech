@@ -61,6 +61,7 @@
                                                 @endif
                                                                                         </td>
                                     <td>
+                                        <div class="d-flex align-items-center gap-2 flex-nowrap">
                                         <a href="{{ route('career.edit', $career->id) }}" class="btn btn-warning btn-sm">Edit</a>
 
                                         <form action="{{ route('career.destroy', $career->id) }}" method="POST"class="delete-form">
@@ -68,6 +69,7 @@
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                         </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty

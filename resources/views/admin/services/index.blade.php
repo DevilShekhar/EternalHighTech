@@ -17,7 +17,8 @@
             </div>
 
             <div class="card-body">
-                <div class="d-flex justify-content-end mb-3" id="customSearchBox">
+                <div class="d-flex justify-content-end mb-3" id="customSearchBox"></div>
+
                 <div class="table-responsive">
                     <table class="table table-striped table-hover" id="tableExport" style="width:100%;">
                         <thead>
@@ -27,9 +28,9 @@
                                 <th>Heading</th>
                                 <th>Sub Heading</th>
                                 <th>Slug</th>
-                                <th>Status</th>
                                 <th>Created By</th>
                                 <th>Updated By</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -41,6 +42,8 @@
                                     <td>{{ $service->heading ?? '-' }}</td>
                                     <td>{{ $service->sub_heading ?? '-' }}</td>
                                     <td>{{ $service->slug ?? '-' }}</td>
+                                    <td>{{ optional($service->creator)->name ?? '-' }}</td>
+                                    <td>{{ optional($service->updater)->name ?? '' }}</td>
                                     <td>
                                         @if($service->status == 'Active')
                                             <span class="badge badge-success">Active</span>
@@ -48,19 +51,17 @@
                                             <span class="badge badge-danger">Inactive</span>
                                         @endif
                                     </td>
-                                    <td>{{ $service->creator->name ?? '-' }}</td>
-                                    <td>{{ $service->updater->name ?? '-' }}</td>
                                     <td>
                                         <div class="d-flex gap-1">
                                             <a href="{{ route('services.edit', $service->id) }}" class="btn btn-warning btn-sm">Edit</a>
 
                                             <form action="{{ route('services.destroy', $service->id) }}" method="POST" class="delete-form">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                        </form>
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                            </form>
                                         </div>
-                                 </td>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
@@ -71,38 +72,33 @@
                     </table>
                 </div>
             </div>
-            </div>
         </div>
     </div>
 </section>
+
 <style>
-    /* 1. Move the "Search:" label and input box to the right side */
     #tableExport_filter {
         float: right;
         text-align: right;
     }
 
-    /* Override Bootstrap row behavior for the bottom DataTable controls */
     #tableExport_wrapper .row:last-of-type {
         display: flex !important;
         flex-direction: column;
         align-items: flex-end;
     }
 
-    /* Reset column widths so they don't force left alignment */
     #tableExport_wrapper .row:last-of-type > div {
         flex: 0 0 auto;
         max-width: 100%;
     }
 
-    /* 2 & 4. Move "Showing..." text to the right, keeping it above pagination */
     #tableExport_info {
         text-align: right !important;
         padding-top: 10px;
         padding-bottom: 10px;
     }
 
-    /* 3. Move pagination buttons to the right side */
     #tableExport_paginate {
         text-align: right !important;
         display: flex;
@@ -111,7 +107,6 @@
 </style>
 
 <script>
-    // DataTable JS event listener to ensure alignment styles persist during pagination/filtering redraws
     $(document).ready(function() {
         $('#tableExport').on('draw.dt init.dt', function () {
             $('#tableExport_filter').css({'float': 'right', 'text-align': 'right'});
@@ -122,7 +117,8 @@
 @else
     @php abort(403); @endphp
 @endif
- @if(session('success'))
+
+@if(session('success'))
 <script>
     Swal.fire({
         icon: 'success',
@@ -132,6 +128,7 @@
     });
 </script>
 @endif
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const deleteForms = document.querySelectorAll('.delete-form');
@@ -142,12 +139,12 @@
 
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
+                    text: "This service will be deactivated!",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
                     cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, delete it!',
+                    confirmButtonText: 'Yes, do it!',
                     cancelButtonText: 'Cancel'
                 }).then((result) => {
                     if (result.isConfirmed) {

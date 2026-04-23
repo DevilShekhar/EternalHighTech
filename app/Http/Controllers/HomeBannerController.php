@@ -91,15 +91,15 @@ class HomeBannerController extends Controller
         return redirect()->route('home-banner.index')->with('success', 'Home banner updated successfully.');
     }
 
-    public function destroy($id)
-    {
-        $homeBanner = HomeBanner::findOrFail($id);
+   public function destroy($id)
+{
+    $homeBanner = HomeBanner::findOrFail($id);
 
-        $homeBanner->deleted_by = Auth::id();
-        $homeBanner->save();
+    $homeBanner->update([
+        'status' => 0,
+        'updated_by' => auth()->id(),
+    ]);
 
-        $homeBanner->delete();
-
-        return redirect()->route('home-banner.index')->with('success', 'Home banner deleted successfully.');
-    }
+    return redirect()->route('home-banner.index')->with('success', 'Home banner marked as inactive successfully.');
+}
 }

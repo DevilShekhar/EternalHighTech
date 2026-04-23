@@ -80,6 +80,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group mb-3">
+                        <label for="status">Status</label>
+                        <select name="status" id="status" class="form-control" required>
+                            <option value="1" {{ $portfolio->status == 1 ? 'selected' : '' }}>Active</option>
+                            <option value="0" {{ $portfolio->status == 0 ? 'selected' : '' }}>Deactive</option>
+                        </select>
+                    </div>
 
                     {{-- STEP 2 --}}
                     <div class="wizard-step-content d-none" id="step-2">

@@ -19,9 +19,9 @@
                                 <th>Image</th>
                                 <th>Heading</th>
                                 <th>Short Description</th>
-                                <th>Status</th>
                                 <th>Created By</th>
                                 <th>Updated By</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -38,6 +38,8 @@
                                     </td>
                                     <td>{{ $banner->heading }}</td>
                                     <td>{{ \Illuminate\Support\Str::limit($banner->short_description, 60) }}</td>
+                                    <td>{{ $banner->creator->name ?? 'N/A' }}</td>
+                                    <td>{{ $banner->updater->name ?? 'N/A' }}</td>
                                     <td>
                                         @if($banner->status == 1)
                                             <span class="badge bg-success">Active</span>
@@ -45,16 +47,18 @@
                                             <span class="badge bg-danger">Inactive</span>
                                         @endif
                                     </td>
-                                    <td>{{ $banner->creator->name ?? 'N/A' }}</td>
-                                    <td>{{ $banner->updater->name ?? 'N/A' }}</td>
                                     <td class="d-flex gap-2">
                                         <a href="{{ route('home-banner.edit', $banner->id) }}" class="btn btn-sm btn-info">Edit</a>
 
-                                        <form action="{{ route('home-banner.destroy', $banner->id) }}" method="POST" class="delete-form">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                        </form>
+                                        @if($banner->status == 1)
+                                            <form action="{{ route('home-banner.destroy', $banner->id) }}" method="POST" class="delete-form">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                            </form>
+                                        @else
+                                            <button type="button" class="btn btn-sm btn-secondary" disabled>Inactive</button>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty
@@ -70,7 +74,8 @@
         </div>
     </div>
 </section>
- @if(session('success'))
+
+@if(session('success'))
 <script>
     Swal.fire({
         icon: 'success',
@@ -80,6 +85,7 @@
     });
 </script>
 @endif
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const deleteForms = document.querySelectorAll('.delete-form');
@@ -90,12 +96,12 @@
 
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
+                    text: "This banner will be marked as inactive!",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
                     cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, delete it!',
+                    confirmButtonText: 'Yes, inactive it!',
                     cancelButtonText: 'Cancel'
                 }).then((result) => {
                     if (result.isConfirmed) {
