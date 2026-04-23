@@ -54,10 +54,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/check-followups', [LeadsController::class, 'checkFollowups']);
 
     Route::get('/reminders', [ReminderController::class, 'index'])->name('reminders.list');
-    Route::get('/completed', [CompleteLeadController::class, 'index'])->name('completed.list');
-    Route::get('/completed/{id}', [CompleteLeadController::class, 'show'])->name('completed.show');
+    Route::get('/onboard', [CompleteLeadController::class, 'index'])->name('onboard.list');
+    Route::get('/onboard/{id}', [CompleteLeadController::class, 'show'])->name('onboard.show');
     Route::get('/filter-leads', [LeadsController::class, 'filterList'])->name('filter.leads');
-    Route::get('/leads-inprogress', [LeadsController::class, 'inprogress'])->name('leads.inprogress');
+   
+    Route::get('/contacted', [LeadsController::class, 'contacted'])->name('contacted.list');
+
+    Route::get('/interested', [LeadsController::class, 'interested'])->name('interested.list');
+    Route::get('/not-interested', [LeadsController::class, 'notInterested'])->name('not_interested.list');   
+    Route::get('/invalid', [LeadsController::class, 'invalid'])->name('invalid.list');
+    Route::get('/junk', [LeadsController::class, 'junk'])->name('junk.list');
     Route::resource('home-banner', HomeBannerController::class);
     
 

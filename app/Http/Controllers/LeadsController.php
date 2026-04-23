@@ -30,26 +30,7 @@ class LeadsController extends Controller
 
         return view('admin.leads.index', compact('leads'));
     }
-    public function inprogress()
-    {
-        $statuses = ['contacted', 'interested'];
-
-        if (Auth::user()->role === 'admin' || Auth::user()->role === 'sales_head') {
-
-            $leads = Lead::whereIn('status', $statuses)
-                ->latest()
-                ->get();
-
-        } else {
-
-            $leads = Lead::where('user_id', Auth::id())
-                ->whereIn('status', $statuses)
-                ->latest()
-                ->get();
-        }
-
-        return view('admin.leads.inprogress', compact('leads'));
-    }
+    
     public function show($id)
     {
         $user = Auth::user();
@@ -205,6 +186,84 @@ class LeadsController extends Controller
         }
 
         return view('admin.leads.allleads', compact('leads', 'salesExecutives'));
+    }
+    public function contacted()
+    {
+        if (Auth::user()->role === 'admin' || Auth::user()->role === 'sales_head') {
+            $leads = Lead::where('status', 'contacted')->latest()->get();
+        } else {
+            $leads = Lead::where('user_id', Auth::id())
+                        ->where('status', 'contacted')
+                        ->latest()
+                        ->get();
+        }
+
+        return view('admin.leads.contacted', compact('leads'));
+    }
+    public function interested()
+    {
+        if (Auth::user()->role === 'admin' || Auth::user()->role === 'sales_head') {
+            $leads = Lead::where('status', 'interested')->latest()->get();
+        } else {
+            $leads = Lead::where('user_id', Auth::id())
+                        ->where('status', 'interested')
+                        ->latest()
+                        ->get();
+        }
+
+        return view('admin.leads.interested', compact('leads'));
+    }
+    public function notInterested()
+    {
+        if (Auth::user()->role === 'admin' || Auth::user()->role === 'sales_head') {
+            $leads = Lead::where('status', 'not_interested')->latest()->get();
+        } else {
+            $leads = Lead::where('user_id', Auth::id())
+                        ->where('status', 'not_interested')
+                        ->latest()
+                        ->get();
+        }
+
+        return view('admin.leads.notinterested', compact('leads'));
+    }
+    public function invalid()
+    {
+        if (Auth::user()->role === 'admin' || Auth::user()->role === 'sales_head') {
+            $leads = Lead::where('status', 'invalid')->latest()->get();
+        } else {
+            $leads = Lead::where('user_id', Auth::id())
+                        ->where('status', 'invalid')
+                        ->latest()
+                        ->get();
+        }
+
+        return view('admin.leads.invalid', compact('leads'));
+    }
+    public function junk()
+    {
+        if (Auth::user()->role === 'admin' || Auth::user()->role === 'sales_head') {
+            $leads = Lead::where('status', 'junk')->latest()->get();
+        } else {
+            $leads = Lead::where('user_id', Auth::id())
+                        ->where('status', 'junk')
+                        ->latest()
+                        ->get();
+        }
+
+        return view('admin.leads.junk', compact('leads'));
+    }
+    public function onboard()
+    {
+        if (Auth::user()->role === 'admin' || Auth::user()->role === 'sales_head') {
+            $leads = Lead::where('status', 'onboard')->latest()->get();
+        } else {
+            $leads = Lead::where('user_id', Auth::id())
+                        ->where('status', 'onboard')
+                        ->latest()
+                        ->get();
+        }
+
+        return view('admin.leads.status', compact('leads'));
     }
     
 }

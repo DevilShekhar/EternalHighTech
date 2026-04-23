@@ -17,13 +17,16 @@
                     <div class="col-md-3">
                         <label>Status</label>
                         <select name="status" class="form-control">
-                            <option value="">All Leads</option>
-                            <option value="assigned">Assigned</option>
-                            <option value="closed">Closed</option>
-                            <option value="contacted">Contacted</option>
-                            <option value="completed">Completed</option>
-                            <option value="not_interested">Not Interested</option>
-                        </select>
+                        <option value="">All Leads</option>
+                        <option value="assigned">Assigned</option>
+                        <option value="contacted">Contacted</option>
+                        <option value="interested">Interested</option>
+                        <option value="not_interested">Not Interested</option>                        
+                        <option value="completed">Completed</option>
+                        <option value="invalid">Invalid</option>
+                        <option value="junk">Junk</option>
+                        <option value="onboard">Onboard</option>
+                    </select>
                     </div>
 
                     <div class="col-md-3">
@@ -107,7 +110,7 @@ $(document).ready(function(){
                         let badgeClass = 'bg-secondary';
 
                         if (lead.status === 'assigned') badgeClass = 'bg-warning';
-                        else if (lead.status === 'closed') badgeClass = 'bg-success';
+                        else if (lead.status === 'onboard') badgeClass = 'bg-success';
                         else if (lead.status === 'contacted') badgeClass = 'bg-info';
                         else if (lead.status === 'completed') badgeClass = 'bg-primary';
                         else if (lead.status === 'not_interested') badgeClass = 'bg-danger';

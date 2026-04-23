@@ -11,23 +11,46 @@
         <!-- Filter Buttons -->
         <div class="buttons d-flex flex-wrap gap-2 mt-3">
 
-            <a href="{{ route('leads.index') }}" class="btn btn-secondary">
-                 All Leads
-            </a>
-          
-            <a href="{{ route('leads.inprogress') }}" class="btn btn-warning">
-                In Progress
-            </a>
-            <a href="{{ route('reminders.list') }}" class="btn btn-info">
-                 Reminder
-            </a>
-            <a href="{{ route('completed.list') }}" class="btn btn-success">
-                 Completed
+            <a href="{{ route('leads.index') }}"
+               class="btn btn-secondary {{ request()->routeIs('leads.index') ? 'active' : '' }}">
+                Assigned
             </a>
 
-            <a href="#" class="btn btn-danger">
+            <a href="{{ route('contacted.list') }}"
+               class="btn btn-warning {{ request()->routeIs('contacted.list') ? 'active' : '' }}">
+                Contacted
+            </a>
+
+            <a href="{{ route('interested.list') }}"
+               class="btn btn-success {{ request()->routeIs('interested.list') ? 'active' : '' }}">
+                Interested
+            </a>
+
+            <a href="{{ route('not_interested.list') }}"
+               class="btn btn-dark {{ request()->routeIs('not_interested.list') ? 'active' : '' }}">
+                Not Interested
+            </a>
+
+            <a href="{{ route('invalid.list') }}"
+               class="btn btn-outline-secondary {{ request()->routeIs('invalid.list') ? 'active' : '' }}">
+                Invalid
+            </a>
+
+            <a href="{{ route('junk.list') }}"
+               class="btn btn-danger {{ request()->routeIs('junk.list') ? 'active' : '' }}">
                 Junk
             </a>
+
+            <a href="{{ route('onboard.list') }}"
+               class="btn btn-primary {{ request()->routeIs('onboard.list') ? 'active' : '' }}">
+                Onboard
+            </a>
+
+            <a href="{{ route('reminders.list') }}"
+               class="btn btn-info {{ request()->routeIs('reminders.list') ? 'active' : '' }}">
+                Reminder
+            </a>
+
         </div>
     </div>
     
@@ -80,7 +103,7 @@
 
                             <td>
                                 <span class="badge badge-success">
-                                    Closed
+                                    Onboard
                                 </span>
                             </td>
 
@@ -97,7 +120,7 @@
                             </td>
                             <td>
                                <div class="btn-group">
-                                    <a href="{{ route('completed.show', $lead->lead_id) }}" class="btn btn-sm btn-info">
+                                    <a href="{{ route('onboard.show', $lead->lead_id) }}" class="btn btn-sm btn-info">
                                         View
                                     </a>
                                 </div>

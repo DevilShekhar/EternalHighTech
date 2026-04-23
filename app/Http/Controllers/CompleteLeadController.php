@@ -17,7 +17,7 @@ class CompleteLeadController extends Controller
          $user = Auth::user(); //  get logged-in user
 
         $query = LeadFollowup::with(['lead', 'user'])
-            ->where('status', 'closed')
+            ->where('status', 'onboard')
             ->latest();
 
         //  Apply role condition
