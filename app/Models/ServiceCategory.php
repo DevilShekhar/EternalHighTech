@@ -10,6 +10,7 @@ class ServiceCategory extends Model
     protected $fillable = [
         'category_name',
         'slug',
+         'status',
         'created_by',
         'updated_by',
     ];

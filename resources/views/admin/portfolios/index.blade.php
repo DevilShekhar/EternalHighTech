@@ -28,6 +28,7 @@
                                 <th>Link One</th>
                                 <th>Performance Title</th>
                                 <th>Client Heading</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -53,19 +54,28 @@
                                     </td>
                                     <td>{{ $portfolio->meta_ads_title ?? '-' }}</td>
                                     <td>{{ $portfolio->feedback_heading ?? '-' }}</td>
+                                        <td>
+                                            @if($portfolio->status == 1)
+                                                <span class="btn btn-success btn-sm">Active</span>
+                                            @else
+                                                <span class="btn btn-danger btn-sm">Deactive</span>
+                                            @endif
+                                        </td>
                                     <td>
-                                        <a href="{{ route('portfolios.edit', $portfolio->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                        <div class="d-flex align-items-center gap-2 flex-nowrap">
+                                            <a href="{{ route('portfolios.edit', $portfolio->id) }}" class="btn btn-warning btn-sm">Edit</a>
 
-                                        <form action="{{ route('portfolios.destroy', $portfolio->id) }}"  method="POST" class="delete-form">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                        </form>
+                                           <form action="{{ route('portfolios.destroy', $portfolio->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                          </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8" class="text-center">No portfolio records found.</td>
+                                    <td colspan="9" class="text-center">No portfolio records found.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -78,7 +88,7 @@
 @else
     @php abort(403); @endphp
 @endif
- @if(session('success'))
+@if(session('success'))
 <script>
     Swal.fire({
         icon: 'success',

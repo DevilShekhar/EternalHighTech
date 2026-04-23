@@ -19,29 +19,30 @@ class CareerController extends Controller
     }
 
     public function store(Request $request)
-{
-    $request->validate([
-        'title' => 'required|string|max:255',
-        'location' => 'required|string|max:255',
-        'experience' => 'required|string|max:255',
-        'industry' => 'required|string|max:255',
-        'description' => 'required',
-        'job_type' => 'required|string|max:255',
-        'image' => 'required|image|mimes:jpg,jpeg,png,webp',
-    ]);
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'experience' => 'required|string|max:255',
+            'industry' => 'required|string|max:255',
+            'description' => 'required',
+            'job_type' => 'required|string|max:255',
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp',
+        ]);
 
-    $data = $request->except('image');
-    $data['created_by'] = auth()->id();
-    $data['status'] = 1;
+        $data = $request->except('image');
+        $data['created_by'] = auth()->id();
+        $data['updated_by'] = null;
+        $data['status'] = 1;
 
-    if ($request->hasFile('image')) {
-        $data['image'] = $request->file('image')->store('careers', 'public');
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('careers', 'public');
+        }
+
+        Career::create($data);
+
+        return redirect()->route('career.index')->with('success', 'Career created successfully.');
     }
-
-    Career::create($data);
-
-    return redirect()->route('career.index')->with('success', 'Career created successfully.');
-}
 
     public function edit($id)
     {
@@ -66,6 +67,7 @@ class CareerController extends Controller
 
         $data = $request->except('image');
         $data['updated_by'] = auth()->id();
+
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('careers', 'public');
         }
@@ -78,8 +80,12 @@ class CareerController extends Controller
     public function destroy($id)
     {
         $career = Career::findOrFail($id);
-        $career->delete();
 
-        return redirect()->route('career.index')->with('success', 'Career deleted successfully.');
+        $career->update([
+            'status' => 0,
+            'updated_by' => auth()->id(),
+        ]);
+
+        return redirect()->route('career.index')->with('success', 'Career deactivated successfully.');
     }
 }

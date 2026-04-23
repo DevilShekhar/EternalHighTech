@@ -48,6 +48,7 @@ class BlogController extends Controller
         $blog->meta_description = $request->meta_description;
         $blog->status = 'Active';
         $blog->created_by = Auth::id();
+        $blog->updated_by = null;
 
         if ($request->hasFile('heading_image')) {
             $file = $request->file('heading_image');
@@ -127,8 +128,12 @@ class BlogController extends Controller
     public function destroy($id)
     {
         $blog = Blog::findOrFail($id);
-        $blog->delete();
 
-        return redirect()->route('blogs.index')->with('success', 'Blog deleted successfully.');
+        $blog->update([
+            'status' => 'Inactive',
+            'updated_by' => Auth::id(),
+        ]);
+
+        return redirect()->route('blogs.index')->with('success', 'Blog deactivated successfully.');
     }
 }

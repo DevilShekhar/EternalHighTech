@@ -11,9 +11,9 @@ class TestimonialController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+   public function index()
     {
-        $testimonials = Testimonial::latest()->get();
+        $testimonials = Testimonial::with(['creator', 'updater'])->latest()->get();
         return view('admin.testimonial.index', compact('testimonials'));
     }
 
@@ -49,7 +49,7 @@ class TestimonialController extends Controller
             'description' => $request->description,
             'image' => $imagePath,
             'created_by' => auth()->id(),
-            'updated_by' => auth()->id(),
+            'updated_by' => null,
         ]);
 
         return redirect()

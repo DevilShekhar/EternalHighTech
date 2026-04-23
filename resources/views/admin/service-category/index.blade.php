@@ -27,30 +27,44 @@
                                 <th>Slug</th>
                                 <th>Created By</th>
                                 <th>Updated By</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($categories as $key => $category)
+                            @forelse($serviceCategories as $key => $category)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $category->category_name ?? '-' }}</td>
                                     <td>{{ $category->slug ?? '-' }}</td>
-                                    <td>{{ $category->creator->name ?? '-' }}</td>
-                                    <td>{{ $category->updater->name ?? '-' }}</td>
+                                    <td>{{ optional($category->creator)->name ?? '-' }}</td>
+                                    <td>{{ optional($category->updater)->name ?? '' }}</td>
                                     <td>
-                                        <a href="{{ route('service-category.edit', $category->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                        @if($category->status == 1)
+                                            <span class="btn btn-success btn-sm">Active</span>
+                                        @else
+                                            <span class="btn btn-danger btn-sm">Deactive</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2 flex-nowrap">
+                                            <a href="{{ route('service-category.edit', $category->id) }}" class="btn btn-warning btn-sm">
+                                                Edit
+                                            </a>
 
-                                        <form action="{{ route('service-category.destroy', $category->id) }}"method="POST" class="delete-form">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                        </form>
+                                            <form action="{{ route('service-category.destroy', $category->id) }}" method="POST" class="delete-form m-0">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center">No category records found.</td>
+                                    <td colspan="7" class="text-center">No category records found.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -63,7 +77,8 @@
 @else
     @php abort(403); @endphp
 @endif
- @if(session('success'))
+
+@if(session('success'))
 <script>
     Swal.fire({
         icon: 'success',
@@ -73,6 +88,7 @@
     });
 </script>
 @endif
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const deleteForms = document.querySelectorAll('.delete-form');
@@ -83,12 +99,12 @@
 
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
+                    text: "This category will be deactivated!",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
                     cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, delete it!',
+                    confirmButtonText: 'Yes, deactivate it!',
                     cancelButtonText: 'Cancel'
                 }).then((result) => {
                     if (result.isConfirmed) {

@@ -9,38 +9,32 @@ use Illuminate\Support\Str;
 
 class ServiceCategoryController extends Controller
 {
-    public function index()
+   public function index()
     {
-        $categories = ServiceCategory::with(['creator', 'updater'])->latest()->get();
-        return view('admin.service-category.index', compact('categories'));
+        $serviceCategories = ServiceCategory::with(['creator', 'updater'])->latest()->get();
+        return view('admin.service-category.index', compact('serviceCategories'));
     }
 
-    public function create()
-    {
-        return view('admin.service-category.create');
-    }
+        public function create()
+        {
+            return view('admin.service-category.create');
+        }
 
-    public function store(Request $request)
+        public function store(Request $request)
     {
         $request->validate([
             'category_name' => 'required|string|max:255',
         ]);
 
-        $slug = Str::slug($request->category_name);
-        $originalSlug = $slug;
-        $count = 1;
-
-        while (ServiceCategory::where('slug', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $count++;
-        }
-
         ServiceCategory::create([
             'category_name' => $request->category_name,
-            'slug' => $slug,
-            'created_by' => Auth::id(),
+            'slug' => \Illuminate\Support\Str::slug($request->category_name),
+            'status' => 1,
+            'created_by' => auth()->id(),
+            'updated_by' => null,
         ]);
 
-        return redirect()->route('service-category.index')->with('success', 'Category created successfully.');
+        return redirect()->route('service-category.index')->with('success', 'Service category created successfully.');
     }
 
     public function edit($id)
@@ -55,30 +49,27 @@ class ServiceCategoryController extends Controller
 
         $request->validate([
             'category_name' => 'required|string|max:255',
+            'status' => 'required|in:0,1',
         ]);
-
-        $slug = Str::slug($request->category_name);
-        $originalSlug = $slug;
-        $count = 1;
-
-        while (ServiceCategory::where('slug', $slug)->where('id', '!=', $id)->exists()) {
-            $slug = $originalSlug . '-' . $count++;
-        }
 
         $category->update([
             'category_name' => $request->category_name,
-            'slug' => $slug,
-            'updated_by' => Auth::id(),
+            'slug' => \Str::slug($request->category_name),
+            'status' => $request->status,
+            'updated_by' => auth()->id(),
         ]);
 
         return redirect()->route('service-category.index')->with('success', 'Category updated successfully.');
     }
-
     public function destroy($id)
     {
-        $category = ServiceCategory::findOrFail($id);
-        $category->delete();
+        $serviceCategory = ServiceCategory::findOrFail($id);
 
-        return redirect()->route('service-category.index')->with('success', 'Category deleted successfully.');
+        $serviceCategory->update([
+            'status' => 0,
+            'updated_by' => auth()->id(),
+        ]);
+
+        return redirect()->route('service-category.index')->with('success', 'Service category deactivated successfully.');
     }
 }
