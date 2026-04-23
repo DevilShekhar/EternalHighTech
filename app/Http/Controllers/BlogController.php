@@ -46,7 +46,7 @@ class BlogController extends Controller
         $blog->meta_title = $request->meta_title;
         $blog->meta_keyword = $request->meta_keyword;
         $blog->meta_description = $request->meta_description;
-        $blog->status = 'Active';
+        $blog->status = 1;
         $blog->created_by = Auth::id();
         $blog->updated_by = null;
 
@@ -91,7 +91,7 @@ class BlogController extends Controller
             'meta_title' => 'nullable|string|max:255',
             'meta_keyword' => 'nullable|string',
             'meta_description' => 'nullable|string',
-            'status' => 'required|in:Active,Inactive',
+            'status' => 'required|in:0,1',
         ]);
 
         $blog->heading = $request->heading;
@@ -130,8 +130,8 @@ class BlogController extends Controller
         $blog = Blog::findOrFail($id);
 
         $blog->update([
-            'status' => 'Inactive',
-            'updated_by' => Auth::id(),
+            'status' => 0,
+            'updated_by' => auth()->id(),
         ]);
 
         return redirect()->route('blogs.index')->with('success', 'Blog deactivated successfully.');

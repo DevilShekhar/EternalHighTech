@@ -79,21 +79,19 @@
                                                         <span class="btn btn-danger btn-sm">Deactive</span>
                                                     @endif
                                                 </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center gap-2 flex-nowrap">
-                                                        <a href="{{ route('testimonial.edit', $testimonial->id) }}"
-                                                        class="btn btn-sm btn-info">
-                                                            Edit
-                                                        </a>
+                                                      <td>
+                                                            <a href="{{ route('testimonial.edit', $testimonial->id) }}" class="btn btn-sm btn-info me-2">
+                                                                Edit
+                                                            </a>
 
-                                                    <form action="{{ route('testimonial.destroy', $testimonial->id) }}" method="POST" class="delete-form d-inline">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                            <form action="{{ route('testimonial.destroy', $testimonial->id) }}" method="POST" class="delete-form" style="display:inline-block;">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                            </form>
+                                                        </td>
+
+                                                    </tr>
                                         @empty
                                             <tr>
                                                 <td colspan="9" class="text-center">No Testimonials Found</td>

@@ -15,6 +15,17 @@
             </div>
 
             <div class="card-body">
+
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <form action="{{ route('blogs.update', $blog->id) }}" method="POST" enctype="multipart/form-data" id="blogEditForm">
                     @csrf
                     @method('PUT')
@@ -32,7 +43,6 @@
                         </div>
                     </div>
 
-                    {{-- Step 1 --}}
                     <div id="step1">
                         <div class="row">
                             <div class="col-md-6">
@@ -100,7 +110,6 @@
                         </div>
                     </div>
 
-                    {{-- Step 2 --}}
                     <div id="step2" style="display:none;">
                         <div class="row">
                             <div class="col-md-12">
@@ -134,9 +143,9 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Status</label>
-                                    <select name="status" class="form-control">
-                                        <option value="Active" {{ old('status', $blog->status) == 'Active' ? 'selected' : '' }}>Active</option>
-                                        <option value="Inactive" {{ old('status', $blog->status) == 'Inactive' ? 'selected' : '' }}>Inactive</option>
+                                    <select name="status" class="form-control" required>
+                                        <option value="1" {{ old('status', $blog->status) == 1 ? 'selected' : '' }}>Active</option>
+                                        <option value="0" {{ old('status', $blog->status) == 0 ? 'selected' : '' }}>Inactive</option>
                                     </select>
                                 </div>
                             </div>

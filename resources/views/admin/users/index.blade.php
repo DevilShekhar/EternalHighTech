@@ -17,6 +17,7 @@
             </div>
         </div>
     </section>
+
     <section class="section premium-dashboard pt-0">
         <div class="section-body">
             <div class="row">
@@ -28,8 +29,8 @@
                                 <p class="header-subtext mb-0">All registered users are displayed below</p>
                             </div>
                         </div>
+
                         <div class="card-body">
-                           
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover" id="tableExport" style="width:100%;">
                                     <thead>
@@ -40,6 +41,7 @@
                                             <th>Contact</th>
                                             <th>Gender</th>
                                             <th>Role</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -66,17 +68,29 @@
                                                 <td>
                                                     <strong>Email:</strong> {{ $user->email }}<br>
                                                     <strong>Mobile:</strong> {{ $user->mobile_number ?? '-' }}
-                                                </td>                                          
+                                                </td>
                                                 <td>{{ $user->gender ?? '-' }}</td>
-                                                <td>{{ $user->role ?? '-' }}</td>       
+                                                <td>{{ $user->role ?? '-' }}</td>
                                                 <td>
-                                                    <div class="btn-group" role="group">
-                                                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary">Edit</a>
-                                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="delete-form">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                                        </form>
+                                                    @if($user->status == 1)
+                                                        <span class="badge bg-success">Active</span>
+                                                    @else
+                                                        <span class="badge bg-danger">Inactive</span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary mr-2">Edit</a>
+
+                                                        @if($user->status == 1)
+                                                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="delete-form m-0">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                            </form>
+                                                        @else
+                                                            <button type="button" class="btn btn-sm btn-secondary" disabled>Delete</button>
+                                                        @endif
                                                     </div>
                                                 </td>
                                             </tr>
@@ -94,10 +108,12 @@
             </div>
         </div>
     </section>
+
 @else
     @php abort(403); @endphp
 @endif
- @if(session('success'))
+
+@if(session('success'))
 <script>
     Swal.fire({
         icon: 'success',
@@ -107,6 +123,7 @@
     });
 </script>
 @endif
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const deleteForms = document.querySelectorAll('.delete-form');
@@ -117,12 +134,12 @@
 
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
+                    text: "This user will be marked as inactive!",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
                     cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, delete it!',
+                    confirmButtonText: 'Yes, inactive it!',
                     cancelButtonText: 'Cancel'
                 }).then((result) => {
                     if (result.isConfirmed) {

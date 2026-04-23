@@ -52,15 +52,13 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <div class="d-flex gap-1">
-                                            <a href="{{ route('services.edit', $service->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                        <a href="{{ route('services.edit', $service->id) }}" class="btn btn-warning btn-sm me-2">Edit</a>
 
-                                            <form action="{{ route('services.destroy', $service->id) }}" method="POST" class="delete-form">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                            </form>
-                                        </div>
+                                        <form action="{{ route('services.destroy', $service->id) }}" method="POST" class="delete-form" style="display:inline-block;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
                                     </td>
                                 </tr>
                             @empty

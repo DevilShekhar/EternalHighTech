@@ -78,18 +78,14 @@
                                 @enderror
                             </div>
 
-                           
-
-                            
-
                             <div class="col-md-6 mb-4">
                                 <label class="form-group-label">Gender</label>
-                               <select name="gender" class="form-control premium-input">
-                                 <option value="">Select gender</option>
-                                 <option value="Male" {{ old('gender', $user->gender) == 'Male' ? 'selected' : '' }}>Male</option>
-                                 <option value="Female" {{ old('gender', $user->gender) == 'Female' ? 'selected' : '' }}>Female</option>
-                                 <option value="Other" {{ old('gender', $user->gender) == 'Other' ? 'selected' : '' }}>Other</option>
-                               </select>
+                                <select name="gender" class="form-control premium-input">
+                                    <option value="">Select gender</option>
+                                    <option value="Male" {{ old('gender', $user->gender) == 'Male' ? 'selected' : '' }}>Male</option>
+                                    <option value="Female" {{ old('gender', $user->gender) == 'Female' ? 'selected' : '' }}>Female</option>
+                                    <option value="Other" {{ old('gender', $user->gender) == 'Other' ? 'selected' : '' }}>Other</option>
+                                </select>
                                 @error('gender')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -126,6 +122,17 @@
                                 </select>
 
                                 @error('role')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label class="form-group-label">Status</label>
+                                <select name="status" class="form-control premium-input">
+                                    <option value="1" {{ old('status', $user->status) == 1 ? 'selected' : '' }}>Active</option>
+                                    <option value="0" {{ old('status', $user->status) == 0 ? 'selected' : '' }}>Inactive</option>
+                                </select>
+                                @error('status')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
@@ -168,19 +175,19 @@
                     <div class="card-body">
                         <div class="profile-upload-box">
                             <div class="profile-avatar-preview">
-                               @if($user->profile_photo)
-    <img src="{{ asset('storage/' . $user->profile_photo)}}"
-         alt="{{ $user->name }}"
-         width="45"
-         height="45"
-         style="object-fit: cover; border-radius: 50%;">
-@else
-    <img src="{{ asset('assets/img/user.png') }}"
-         alt="Default User"
-         width="45"
-         height="45"
-         style="object-fit: cover; border-radius: 50%;">
-@endif
+                                @if($user->profile_photo)
+                                    <img src="{{ asset('storage/' . $user->profile_photo)}}"
+                                         alt="{{ $user->name }}"
+                                         width="45"
+                                         height="45"
+                                         style="object-fit: cover; border-radius: 50%;">
+                                @else
+                                    <img src="{{ asset('assets/img/user.png') }}"
+                                         alt="Default User"
+                                         width="45"
+                                         height="45"
+                                         style="object-fit: cover; border-radius: 50%;">
+                                @endif
                             </div>
                             <h5>Upload Profile Photo</h5>
                             <p>PNG, JPG supported</p>

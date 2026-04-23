@@ -179,8 +179,8 @@ class ServiceController extends Controller
         $service = Service::findOrFail($id);
 
         $service->update([
-            'status' => 'Inactive',
-            'updated_by' => Auth::id(),
+            'status' => 0,
+            'updated_by' => auth()->id(),
         ]);
 
         return redirect()->route('services.index')->with('success', 'Service deactivated successfully.');  

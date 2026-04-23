@@ -45,6 +45,7 @@ class UserController extends Controller
             'mobile_number' => $request->mobile_number,
             'gender' => $request->gender,
             'role' => $request->role,
+            'status' => 1,
             'date_of_birth' => $request->date_of_birth,
             'address' => $request->address,
             'password' => Hash::make($request->password),
@@ -76,6 +77,7 @@ class UserController extends Controller
             'mobile_number' => 'required|string|max:20',
             'gender' => 'required|string|max:20',
             'role' => 'required|string|max:50',
+            'status' => 'required|in:0,1',
             'date_of_birth' => 'required|date',
             'address' => 'required|string',
             'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5048',
@@ -87,6 +89,7 @@ class UserController extends Controller
         $user->mobile_number = $request->mobile_number;
         $user->gender = $request->gender;
         $user->role = $request->role;
+        $user->status = $request->status;
         $user->date_of_birth = $request->date_of_birth;
         $user->address = $request->address;
 
@@ -108,15 +111,9 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if (!empty($user->profile_photo)) {
-            $filePath = public_path('storage/' . $user->profile_photo);
-            if (file_exists($filePath)) {
-                unlink($filePath);
-            }
-        }
+        $user->status = 0;
+        $user->save();
 
-        $user->delete();
-
-        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+        return redirect()->route('users.index')->with('success', 'User marked as inactive successfully.');
     }
 }
