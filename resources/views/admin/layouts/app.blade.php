@@ -301,24 +301,37 @@
                         </a>
                         <ul class="dropdown-menu">
                            <li class="{{ request()->routeIs('leads.index') ? 'active' : '' }}">
-                                 <a class="nav-link" href="{{ route('leads.index') }}">All Leads</a>
+                                 <a class="nav-link" href="{{ route('leads.index') }}"> Assigned</a>
+                           </li>
+                            <li class="{{ request()->routeIs('contacted.list') ? 'active' : '' }}">
+                              <a class="nav-link" href="{{ route('contacted.list') }}">Contacted</a>
+                           </li>
+                           <li class="{{ request()->routeIs('interested.list') ? 'active' : '' }}">
+                              <a class="nav-link" href="{{ route('interested.list') }}">Interested</a>
+                           </li>
+                            <li class="{{ request()->routeIs('not_interested.list') ? 'active' : '' }}">
+                              <a class="nav-link" href="{{ route('not_interested.list') }}">Not Interested</a>
+                           </li>
+                            <li class="{{ request()->routeIs('invalid.list') ? 'active' : '' }}">
+                              <a class="nav-link" href="{{ route('invalid.list') }}">Invalid</a>
+                           </li>
+                            <li class="{{ request()->routeIs('junk.list') ? 'active' : '' }}">
+                              <a class="nav-link" href="{{ route('junk.list') }}">junk</a>
                            </li>
 
                            <li class="{{ request()->routeIs('reminders.list') ? 'active' : '' }}">
-                                 <a class="nav-link" href="{{ route('reminders.list') }}">Reminder Leads</a>
+                                 <a class="nav-link" href="{{ route('reminders.list') }}">Reminder</a>
                            </li>
 
-                           <li class="{{ request()->routeIs('completed.list') ? 'active' : '' }}">
-                                 <a class="nav-link" href="{{ route('completed.list') }}">Completed Leads</a>
+                           <li class="{{ request()->routeIs('onboard.list') ? 'active' : '' }}">
+                                 <a class="nav-link" href="{{ route('onboard.list') }}">Onboard </a>
                            </li>
                            @if(auth()->check() && (auth()->user()->role === 'admin' || auth()->user()->role === 'sales_head'))
                            <li class="{{ request()->routeIs('filter.leads') ? 'active' : '' }}">
                               <a class="nav-link" href="{{ route('filter.leads') }}">Filter Leads</a>
                            </li>
                            @endif
-                           <li class="{{ request()->routeIs('leads.inprogress') ? 'active' : '' }}">
-                              <a class="nav-link" href="{{ route('leads.inprogress') }}">Inprogress Leads</a>
-                           </li>
+                         
                         </ul>
                      </li>
 

@@ -87,7 +87,7 @@
 
                         @php
                             $date = Carbon::parse($followup->next_followup_date);
-                            $isOverdue = $date->isPast() && $followup->status !== 'closed';
+                            $isOverdue = $date->isPast() && $followup->status !== 'onboard';
                             $isToday = $date->isToday();
                         @endphp
 
@@ -96,7 +96,7 @@
                             <td>{{ ucfirst($followup->action_type ?? '-') }}</td>
                             <td>
                                 <span class="badge 
-                                    {{ $followup->status == 'closed' ? 'badge-success' : 'badge-info' }}">
+                                    {{ $followup->status == 'onboard' ? 'badge-success' : 'badge-info' }}">
                                     {{ ucfirst($followup->status) }}
                                 </span>
                             </td>

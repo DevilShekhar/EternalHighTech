@@ -343,7 +343,7 @@
                         <td>{{ $key + 1 }}</td>
                         <td>{{ $lead->lead->name ?? 'N/A' }}</td>
                         <td>{{ $lead->user->name ?? 'N/A' }}</td>
-                        <td><span class="badge badge-success">Closed</span></td>
+                        <td><span class="badge badge-success">Onboard</span></td>
                         <td>{{ $lead->updated_at->format('d M Y') }}</td>
                     </tr>
                     @empty
@@ -411,7 +411,7 @@
                   <tr>
                       <td>{{ $key + 1 }}</td>
                       <td>{{ $lead->lead->name ?? 'N/A' }}</td>
-                      <td><span class="badge badge-success">Closed</span></td>
+                      <td><span class="badge badge-success">Onboard</span></td>
                       <td>{{ $lead->updated_at->format('d M Y') }}</td>
                   </tr>
                   @empty

@@ -70,7 +70,7 @@
                 </div>
             </div>
         @endif
-    @if($lead->status !== 'closed')
+    @if($lead->status !== 'onboard')
         <!-- 🔹 Action Button -->
         <div class="mb-3 text-end">
     
@@ -199,7 +199,7 @@
                                 <option value="contacted">Contacted</option>
                                 <option value="interested">Interested</option>
                                 <option value="not_interested">Not Interested</option>
-                                <option value="closed">Closed</option>
+                                <option value="onboard">Onboard</option>
                                 <option value="invalid">Invalid</option>
                                 <option value="junk">Junk</option>
                             </select>
