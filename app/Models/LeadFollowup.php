@@ -11,6 +11,9 @@ class LeadFollowup extends Model
         'user_id',
         'action_type',
         'status',
+        'business_name',
+        'alt_mobile',
+        'short_desc',
         'note',
         'next_followup_date',
         'reminder_sent'

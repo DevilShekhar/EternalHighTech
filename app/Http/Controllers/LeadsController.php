@@ -53,9 +53,10 @@ class LeadsController extends Controller
     public function show($id)
     {
         $user = Auth::user();
+
         $lead = Lead::with('followups.user')->findOrFail($id);
 
-        // security check (sales should see only their leads)
+        // Security check
         if (
             $user->role !== 'admin' &&
             $user->role !== 'sales_head' &&
@@ -63,14 +64,26 @@ class LeadsController extends Controller
         ) {
             abort(403);
         }
+
+        // ✅ Get first followup where business/mobile exists
+        $firstFollowup = LeadFollowup::where('lead_id', $lead->id)
+            ->where(function ($q) {
+                $q->whereNotNull('business_name')
+                ->orWhereNotNull('alt_mobile');
+            })
+            ->first();
+
+        // Lead logs
         $leadLogs = [];
-            if ($user->role === 'admin') {
-                $leadLogs = \DB::table('lead_logs')
-                    ->where('lead_id', $id)
-                    ->orderBy('created_at', 'desc')
-                    ->get();
-            }
-        return view('admin.leads.show', compact('lead','leadLogs'));
+        if ($user->role === 'admin') {
+            $leadLogs = \DB::table('lead_logs')
+                ->where('lead_id', $id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+
+        // ✅ PASS VARIABLE HERE
+        return view('admin.leads.show', compact('lead', 'leadLogs', 'firstFollowup'));
     }
     public function storeFollowup(Request $request, $leadId)
     {
@@ -79,19 +92,32 @@ class LeadsController extends Controller
             'status' => 'required',
             'note' => 'required',
             'next_followup_date' => 'nullable|date',
+            'business_name' => 'nullable|string|max:255',
+            'alt_mobile' => 'nullable|string|max:20',
+            'short_desc' => 'nullable|string',
         ]);
 
         $lead = Lead::findOrFail($leadId);
 
-        //  Security check
-        if (Auth::user()->role !== 'admin' && $lead->user_id !== Auth::id()) {
+        // Security check
+        if (
+            !in_array(Auth::user()->role, ['admin', 'sales_head']) &&
+            $lead->user_id !== Auth::id()
+        ) {
             abort(403);
         }
 
-        // Convert datetime properly
+        // ✅ Check if already saved once
+        $firstFollowup = LeadFollowup::where('lead_id', $lead->id)
+            ->where(function ($q) {
+                $q->whereNotNull('business_name')
+                ->orWhereNotNull('alt_mobile');
+            })
+            ->first();
+
         $nextFollowup = $request->filled('next_followup_date')
-    ? Carbon::parse($request->next_followup_date)
-    : null;
+            ? Carbon::parse($request->next_followup_date)
+            : null;
 
         LeadFollowup::create([
             'lead_id' => $lead->id,
@@ -99,10 +125,15 @@ class LeadsController extends Controller
             'action_type' => $request->action_type,
             'status' => $request->status,
             'note' => $request->note,
+
+            // ✅ Save only first time
+            'business_name' => $firstFollowup ? null : $request->business_name,
+            'alt_mobile' => $firstFollowup ? null : $request->alt_mobile,
+
+            'short_desc' => $request->short_desc,
             'next_followup_date' => $nextFollowup,
         ]);
 
-        // Update lead status
         $lead->update([
             'status' => $request->status
         ]);
