@@ -44,8 +44,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('leads', LeadsController::class);    
     Route::get('/check-lead', [LeadController::class, 'checkLead']);
-    Route::post('/accept-lead/{id}', [LeadController::class, 'acceptLead']);
-    Route::post('/skip-lead/{id}', [LeadController::class, 'skipLead']);
+  
 
     Route::resource('services', ServiceController::class);
     

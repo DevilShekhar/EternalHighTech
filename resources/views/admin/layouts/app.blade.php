@@ -357,22 +357,21 @@
       <audio id="leadSound" src="{{ asset('sounds/notification.mp3') }}" preload="auto"></audio>
       <script>
          let isPopupOpen = false;
-         
+
          const leadSound = document.getElementById('leadSound');
-         
-         //  UNLOCK AUDIO (browser requirement)
+
+         // unlock audio
          document.addEventListener('click', function () {
             leadSound.play().then(() => {
                leadSound.pause();
                leadSound.currentTime = 0;
             }).catch(() => {});
          }, { once: true });
-         
+
          setInterval(function () {
-         
-            //  do not run if popup already open
+
             if (isPopupOpen) return;
-         
+
             fetch('/check-lead', {
                method: 'GET',
                credentials: 'same-origin',
@@ -380,112 +379,53 @@
                      'Accept': 'application/json'
                }
             })
-            .then(res => {
-               if (!res.ok) throw new Error("Check failed " + res.status);
-               return res.json();
-            })
+            .then(res => res.json())
             .then(data => {
-         
+
+               console.log("API RESPONSE:", data); // 👈 DEBUG
+
                if (!data || !data.id) return;
-         
+
                isPopupOpen = true;
-         
+
                Swal.fire({
-                     title: "🚀 New Lead Assigned",
-                     html: `
-                        <b>Name:</b> ${data.name}<br>
-                        <b>Phone:</b> ${data.phone}<br>
-                        <b>Service:</b> ${data.services}<br>
-                        <b>Budget:</b> ${data.budget}
-                     `,
-                     icon: "info",
-                     showCancelButton: true,
-                     confirmButtonText: "Accept Lead",
-                     cancelButtonText: "Ignore",
-                     allowOutsideClick: false,
-                     allowEscapeKey: false,
-                     timer: 300000,
-                     timerProgressBar: true,
-         
-                     //  CONTINUOUS SOUND
-                     didOpen: () => {
-         
-                        leadSound.loop = true; // 🔁 repeat forever
-                        leadSound.currentTime = 0;
-         
-                        leadSound.play()
-                           .then(() => console.log("🔊 Sound playing..."))
-                           .catch(err => console.log("❌ Sound blocked:", err));
-                     }
-               }).then((result) => {
-         
-                     //  STOP SOUND COMPLETELY
-                     leadSound.pause();
+                  title: "🚀 New Lead Assigned",
+                  html: `
+                     <b>Name:</b> ${data.name}<br>
+                     <b>Phone:</b> ${data.phone}<br>
+                     <b>Service:</b> ${data.services}<br>
+                     <b>Budget:</b> ${data.budget}
+                  `,
+                  icon: "success",
+                  confirmButtonText: "OK",
+                  showCancelButton: false,
+                  allowOutsideClick: false,
+                  allowEscapeKey: false,
+
+                  didOpen: () => {
+                     leadSound.loop = true;
                      leadSound.currentTime = 0;
-                     leadSound.loop = false;
-         
-                     isPopupOpen = false;
-         
-                     if (result.isConfirmed) {
-         
-                        fetch(`/accept-lead/${data.id}`, {
-                           method: "POST",
-                           headers: {
-                                 'Content-Type': 'application/json',
-                                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                                 'Accept': 'application/json'
-                           },
-                           credentials: 'same-origin',
-                           body: JSON.stringify({})
-                        })
-                        .then(res => res.json())
-                        .then(res => {
-         
-                           if (res.success) {
-                                 Swal.fire({
-                                    icon: 'success',
-                                    title: 'Assigned!',
-                                    text: 'Lead assigned to you.',
-                                    timer: 1500,
-                                    showConfirmButton: false,
-                                    willClose: () => {
-                                          //  REDIRECT ADDED
-                                          window.location.href = '/leads';
-                                    }
-                                 });
-                              } else {
-                                 Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: res.error || 'Already assigned'
-                                 });
-                              }
-         
-                        })
-                        .catch(err => console.error(err));
-         
-                     } else {
-         
-                        fetch(`/skip-lead/${data.id}`, {
-                           method: "POST",
-                           headers: {
-                                 'Content-Type': 'application/json',
-                                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                                 'Accept': 'application/json'
-                           },
-                           credentials: 'same-origin',
-                           body: JSON.stringify({})
-                        })
-                        .catch(err => console.error(err));
-                     }
-         
+                     leadSound.play().catch(() => {});
+                  }
+
+               }).then(() => {
+
+                  // 🔇 STOP SOUND
+                  leadSound.pause();
+                  leadSound.currentTime = 0;
+                  leadSound.loop = false;
+
+                  isPopupOpen = false;
+
+                  // 🔁 REDIRECT
+                  window.location.href = '/leads';
                });
-         
+
             })
             .catch(err => {
                console.error("CHECK ERROR:", err);
             });
-         
+
          }, 3000);
       </script>
       <script>

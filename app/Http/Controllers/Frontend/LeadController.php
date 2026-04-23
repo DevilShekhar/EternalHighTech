@@ -73,7 +73,7 @@ class LeadController extends Controller
         // ✅ CREATE LEAD (ASSIGNED)
         Lead::create([
             'user_id' => $nextUser->id,
-            'status' => 'pending',
+            'status' => 'assigned',
             'notified_at' => now(),
 
             'name' => trim($request->name),
@@ -100,13 +100,18 @@ class LeadController extends Controller
     }
 
     // ✅ CHECK LEAD (ONLY ASSIGNED USER)
-    public function checkLead()
+  public function checkLead()
     {
         if (!auth()->check()) {
             return response()->json(null);
         }
 
-        $lead = Lead::where('status', 'pending')
+        // ✅ Only sales users allowed
+        if (auth()->user()->role !== 'sales_executive') {
+            return response()->json(null);
+        }
+
+        $lead = Lead::where('status', 'assigned')
             ->where('user_id', auth()->id())
             ->latest()
             ->first();
@@ -115,18 +120,22 @@ class LeadController extends Controller
             return response()->json(null);
         }
 
-        // ✅ LOG VIEW
-        try {
-            $alreadyViewed = LeadLog::where([
-                'lead_id' => $lead->id,
-                'user_id' => auth()->id(),
-                'action' => 'viewed'
-            ])->exists();
+        // ✅ Prevent duplicate popup
+        $alreadyViewed = LeadLog::where([
+            'lead_id' => $lead->id,
+            'user_id' => auth()->id(),
+            'action' => 'viewed'
+        ])->exists();
 
-            if (!$alreadyViewed) {
-                LeadLog::log($lead->id, auth()->id(), 'viewed');
-            }
-        } catch (\Exception $e) {}
+        if ($alreadyViewed) {
+            return response()->json(null);
+        }
+
+        LeadLog::create([
+            'lead_id' => $lead->id,
+            'user_id' => auth()->id(),
+            'action' => 'viewed'
+        ]);
 
         return response()->json([
             'id' => $lead->id,
@@ -137,64 +146,4 @@ class LeadController extends Controller
         ]);
     }
 
-    // ✅ ACCEPT LEAD
-    public function acceptLead($id)
-    {
-        if (!auth()->check()) {
-            return response()->json(['error' => 'Not logged in'], 401);
-        }
-
-        $lead = Lead::findOrFail($id);
-
-        if ($lead->status === 'assigned') {
-            return response()->json(['error' => 'Already assigned']);
-        }
-
-        $lead->user_id = auth()->id();
-        $lead->status = 'assigned';
-        $lead->save();
-
-        // ✅ LOG
-        try {
-            LeadLog::log($lead->id, auth()->id(), 'accepted');
-        } catch (\Exception $e) {}
-
-        return response()->json([
-            'success' => true,
-            'user_id' => auth()->id()
-        ]);
-    }
-
-    // ✅ SKIP LEAD → NEXT USER
-    public function skipLead($id)
-    {
-        $lead = Lead::find($id);
-
-        if (!$lead || $lead->status === 'assigned') {
-            return response()->json(['error' => 'Invalid'], 400);
-        }
-
-        $users = User::where('role', 'sales_executive')->orderBy('id')->get();
-
-        if ($users->isEmpty()) {
-            return response()->json(['error' => 'No users']);
-        }
-
-        $currentIndex = $users->search(fn($u) => $u->id == $lead->user_id);
-
-        $nextIndex = ($currentIndex + 1) % $users->count();
-
-        $nextUser = $users[$nextIndex];
-
-        $lead->user_id = $nextUser->id;
-        $lead->notified_at = now();
-        $lead->save();
-
-        // ✅ LOG
-        try {
-            LeadLog::log($lead->id, auth()->id(), 'skipped');
-        } catch (\Exception $e) {}
-
-        return response()->json(['success' => true]);
-    }
 }
