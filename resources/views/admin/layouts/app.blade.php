@@ -134,7 +134,7 @@
                         <div class="dropdown-title">
                            Role {{ Auth::user()->role }}
                         </div>
-                        <a href="profile.html" class="dropdown-item has-icon">
+                        <a href="{{ route('users.profile', auth()->user()->id) }}" class="dropdown-item has-icon">
                         <i class="far fa-user"></i> Profile
                         </a>
                         <a href="timeline.html" class="dropdown-item has-icon">
@@ -197,7 +197,7 @@
                      {{-- Home Banner --}}
                      <li class="dropdown {{ request()->routeIs('home-banner.*') ? 'active' : '' }}">
                         <a href="#" class="menu-toggle nav-link has-dropdown">
-                           <i data-feather="home"></i><span>HOME</span>
+                           <i data-feather="home"></i><span>Home Banner</span>
                         </a>
                         <ul class="dropdown-menu">
                            <li class="{{ request()->routeIs('home-banner.index') ? 'active' : '' }}">
@@ -307,7 +307,7 @@
                            <li class="{{ request()->routeIs('completed.list') ? 'active' : '' }}">
                                  <a class="nav-link" href="{{ route('completed.list') }}">Completed Leads</a>
                            </li>
-                            @if(auth()->check() && auth()->user()->role === 'admin')
+                           @if(auth()->check() && (auth()->user()->role === 'admin' || auth()->user()->role === 'sales_head'))
                            <li class="{{ request()->routeIs('filter.leads') ? 'active' : '' }}">
                               <a class="nav-link" href="{{ route('filter.leads') }}">Filter Leads</a>
                            </li>

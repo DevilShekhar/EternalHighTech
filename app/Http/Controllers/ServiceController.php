@@ -174,7 +174,6 @@ class ServiceController extends Controller
 
         return redirect()->route('services.index')->with('success', 'Service updated successfully.');
     }
-
     public function destroy($id)
     {
         $service = Service::findOrFail($id);
@@ -184,6 +183,5 @@ class ServiceController extends Controller
             'updated_by' => Auth::id(),
         ]);
 
-        return redirect()->route('services.index')->with('success', 'Service deactivated successfully.');
-    }
+        return redirect()->route('services.index')->with('success', 'Service deactivated successfully.');  
 }

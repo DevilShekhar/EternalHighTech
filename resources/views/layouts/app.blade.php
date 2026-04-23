@@ -29,7 +29,7 @@
 
     {{-- Hide navbar on login --}}
     @if (!request()->routeIs('login'))
-    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+    <!-- <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
                 {{ config('app.name', 'Designer Portal') }}
@@ -43,7 +43,7 @@
                 <ul class="navbar-nav ms-auto">
                     @guest
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">Login</a>
+                            <a class="nav-link" href="{{ route('login') }}">Loginn</a>
                         </li>
                     @else
                         <li class="nav-item dropdown">
@@ -66,7 +66,7 @@
                 </ul>
             </div>
         </div>
-    </nav>
+    </nav> -->
     @endif
 
     <main>
@@ -76,6 +76,8 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+@yield('scripts')
 
 </body>
 </html>

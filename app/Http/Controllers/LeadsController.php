@@ -15,9 +15,8 @@ class LeadsController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->role === 'admin') {
-
-            $leads = Lead::where('status', 'assigned') //   only assigned
+        if (Auth::user()->role === 'admin' || Auth::user()->role === 'sales_head') {
+                $leads = Lead::where('status', 'assigned') //   only assigned
                 ->latest()
                 ->get();
 
@@ -35,7 +34,7 @@ class LeadsController extends Controller
     {
         $statuses = ['contacted', 'interested'];
 
-        if (Auth::user()->role === 'admin') {
+        if (Auth::user()->role === 'admin' || Auth::user()->role === 'sales_head') {
 
             $leads = Lead::whereIn('status', $statuses)
                 ->latest()
@@ -57,7 +56,11 @@ class LeadsController extends Controller
         $lead = Lead::with('followups.user')->findOrFail($id);
 
         // security check (sales should see only their leads)
-        if (Auth::user()->role !== 'admin' && $lead->user_id !== Auth::id()) {
+        if (
+            $user->role !== 'admin' &&
+            $user->role !== 'sales_head' &&
+            $lead->user_id !== $user->id
+        ) {
             abort(403);
         }
         $leadLogs = [];

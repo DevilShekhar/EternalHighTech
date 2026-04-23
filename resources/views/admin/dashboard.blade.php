@@ -244,7 +244,7 @@
       </div>
 
       @endif
-       @if(auth()->user()->role === 'admin')
+      @if(auth()->check() && (auth()->user()->role === 'admin' || auth()->user()->role === 'sales_head'))
 
       <div class="row">
           <div class="col-12">
@@ -321,7 +321,7 @@
       </div>
 
       @endif
-      @if(auth()->user()->role === 'admin')
+      @if(auth()->check() && (auth()->user()->role === 'admin' || auth()->user()->role === 'sales_head'))
 
         <div class="card mt-4">
             <div class="card-header">
@@ -356,7 +356,7 @@
         </div>
 
         @endif
-        @if(auth()->user()->role === 'admin')
+        @if(auth()->check() && (auth()->user()->role === 'admin' || auth()->user()->role === 'sales_head'))
 
         <div class="card mt-4">
             <div class="card-header">

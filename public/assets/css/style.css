@@ -3963,7 +3963,7 @@ h6 .badge {
   align-items: center;
 }
 .navbar .navbar-brand {
-  color: #fff;
+  color: #000;
   text-transform: uppercase;
   letter-spacing: 3px;
   font-weight: 700;
@@ -10551,5 +10551,615 @@ body.elite-login-body {
 
     .elite-form-box {
         padding: 20px;
+    }
+}
+
+/* reset password */
+/* CENTER CARD */
+.elite-login-card {
+    /* background: #ffffff; */
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+/* HEADING */
+.elite-form-head h2 {
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.elite-form-head p {
+    color: #6c757d;
+    margin-bottom: 25px;
+}
+
+/* INPUT */
+.elite-input-wrap {
+    position: relative;
+}
+
+.elite-input {
+    padding: 14px 15px 14px 45px;
+    border-radius: 12px;
+    border: 1px solid #d0d7ff;
+    transition: 0.3s;
+}
+
+.elite-input:focus {
+    border-color: #5a67d8;
+    box-shadow: 0 0 0 3px rgba(90,103,216,0.2);
+}
+
+/* ICON */
+.elite-input-icon {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: #6c757d;
+}
+
+/* BUTTON */
+.elite-login-btn {
+    background: linear-gradient(90deg, #5a67d8, #4c6ef5);
+    color: #fff;
+    border-radius: 12px;
+    padding: 14px;
+    font-weight: 600;
+    border: none;
+    transition: 0.3s;
+}
+
+.elite-login-btn:hover {
+    opacity: 0.9;
+}
+
+/* confirm password page */
+/* =============================
+   GLOBAL
+============================= */
+body.elite-login-body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #0f172a;
+    overflow-x: hidden;
+}
+
+/* =============================
+   PAGE WRAPPER
+============================= */
+.elite-login-page {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+/* =============================
+   BACKGROUND EFFECTS
+============================= */
+.elite-bg-shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    z-index: 0;
+}
+
+.shape-one {
+    width: 300px;
+    height: 300px;
+    background: #3b82f6;
+    top: -50px;
+    left: -50px;
+}
+
+.shape-two {
+    width: 300px;
+    height: 300px;
+    background: #9333ea;
+    bottom: -50px;
+    right: -50px;
+}
+
+.elite-bg-grid {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /* background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px); */
+    background-size: 40px 40px;
+    z-index: 0;
+}
+
+/* =============================
+   CARD
+============================= */
+.elite-login-card {
+    position: relative;
+    z-index: 2;
+    /* width: 320px; */
+    max-width: 100%;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    padding: 30px;
+    color: #fff;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    /* margin-top: 190px; */
+}
+
+/* =============================
+   TOP BAR
+============================= */
+.elite-login-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.elite-logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.elite-logo-box img {
+    width: 50px;
+}
+
+.elite-brand-text h5 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.elite-brand-text span {
+    font-size: 12px;
+    color: #ccc;
+}
+
+.elite-top-badge {
+    background: rgba(255,255,255,0.1);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+/* =============================
+   CONTENT SPLIT
+============================= */
+.elite-login-content {
+    display: flex;
+    gap: 40px;
+}
+
+/* =============================
+   LEFT SIDE
+============================= */
+.elite-login-left {
+    flex: 1;
+}
+
+.elite-login-left h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.elite-login-left p {
+    color: #ccc;
+    margin-bottom: 20px;
+}
+
+.elite-mini-tag {
+    font-size: 12px;
+    color: #38bdf8;
+    letter-spacing: 1px;
+}
+
+.elite-feature-strip {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.elite-feature-item {
+    display: flex;
+    gap: 10px;
+    font-size: 14px;
+}
+
+/* =============================
+   RIGHT SIDE FORM
+============================= */
+.elite-login-right {
+    flex: 1;
+}
+
+.elite-form-box {
+    background: rgba(255,255,255,0.08);
+    padding: 25px;
+    border-radius: 12px;
+    color: #fff;
+}
+
+.elite-form-head h2 {
+    margin-bottom: 5px;
+}
+
+.elite-form-head p {
+    color: #ccc;
+    font-size: 14px;
+}
+
+/* =============================
+   INPUT FIELDS
+============================= */
+.elite-field {
+    margin-bottom: 18px;
+}
+
+.elite-field label {
+    font-size: 13px;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.elite-input-wrap {
+    position: relative;
+}
+
+.elite-input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+.elite-input::placeholder {
+    color: #aaa;
+}
+
+.elite-input-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ccc;
+}
+
+/* =============================
+   PASSWORD TOGGLE
+============================= */
+.elite-password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+}
+
+/* =============================
+   BUTTON
+============================= */
+.elite-login-btn {
+    background: linear-gradient(135deg, #3b82f6, #9333ea);
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.elite-login-btn:hover {
+    opacity: 0.9;
+}
+
+/* =============================
+   ERROR TEXT
+============================= */
+.invalid-feedback {
+    color: #ff6b6b;
+    font-size: 12px;
+}
+
+/* =============================
+   RESPONSIVE
+============================= */
+
+/* Tablet */
+@media (max-width: 992px) {
+    .elite-login-content {
+        flex-direction: column;
+    }
+
+    .elite-login-left {
+        text-align: center;
+    }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    .elite-login-card {
+        padding: 20px;
+    }
+
+    .elite-login-left h1 {
+        font-size: 24px;
+    }
+
+    .elite-login-top {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+}
+
+.elite-input-wrap {
+    position: relative;
+}
+
+.elite-input {
+    width: 100%;
+    padding: 12px 12px 12px 42px; /* space for icon */
+    border-radius: 10px;
+    border: none;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+.elite-input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #bfc6d4;
+    font-size: 14px;
+    pointer-events: none;
+}
+
+.elite-password-wrap {
+    position: relative;
+}
+
+.elite-password-wrap .elite-eye-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+}
+
+/*  */
+
+body.elite-login-body {
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* COMMON BASE */
+body.elite-login-body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: #0f172a;
+}
+
+/* ✅ LOGIN PAGE → ALLOW SCROLL */
+body.login-page {
+    overflow-y: auto;
+}
+
+/* ❌ OTP PAGE → NO SCROLL */
+body.otp-page {
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* OPTIONAL: CENTER CARD FOR OTP */
+.otp-page .elite-login-card {
+    margin: auto;
+}
+
+/* eye icon */
+.elite-password-wrap {
+    position: relative;
+}
+
+.elite-eye-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #aaa;
+}
+
+/*  */
+/* ===== User Profile Page ===== */
+
+body {
+    background: #f4f6f9;
+    font-family: 'Poppins', sans-serif;
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+/* Profile Card */
+/* Profile Card */
+.profile-card {
+    background: #fff;
+    max-width: 600px;
+    margin: 80px auto;
+    padding: 80px 30px 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    text-align: center;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Hover Effect */
+.profile-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.15);
+}
+
+/* Floating Image Wrapper */
+.profile-img-wrapper {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Profile Image */
+.profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #fff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    background: #fff;
+}
+
+/* Heading */
+.profile-card h1 {
+    margin-top: 30px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #222;
+}
+
+/*  */
+/* Heading */
+.profile-card h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #222;
+}
+
+/* Success message */
+.profile-card p {
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+/* Labels */
+.profile-card label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #444;
+    text-align: left;
+}
+
+/* Inputs (apply to all inputs inside form) */
+.profile-card input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+    font-size: 14px;
+    outline: none;
+    transition: 0.3s;
+}
+
+/* Focus effect */
+.profile-card input:focus {
+    border-color: #6c5ce7;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(108,92,231,0.1);
+}
+
+/* Button */
+.profile-card button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+/* Button hover */
+.profile-card button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(108,92,231,0.3);
+}
+
+/* Optional label style override for your first input class */
+.form-group-label {
+    color: #444;
+}
+
+/* Optional premium input override */
+.premium-input {
+    background: #f9f9f9;
+}
+
+/* Profile Info Text */
+.profile-card p {
+    text-align: left;
+    font-size: 15px;
+    margin: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 8px;
+    color: #444;
+}
+
+/* Labels */
+.profile-card p strong {
+    display: inline-block;
+    width: 130px;
+    color: #111;
+    font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+    .profile-card {
+        margin: 20px;
+        padding: 70px 20px 20px;
+    }
+
+    .profile-card h1 {
+        font-size: 20px;
+    }
+
+    .profile-card p strong {
+        width: 110px;
     }
 }
