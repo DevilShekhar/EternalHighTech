@@ -111,58 +111,7 @@
             </div>
         </section>
         <!-- SECTION 2 -->
-        <section class="section premium-dashboard pt-0">
-          <div class="card premium-block quick-actions-card">
-            <div class="card-header premium-card-header">
-              <h4>Quick Actions</h4>
-            </div>
-
-            <div class="card-body">
-              <div class="quick-actions-grid">
-                <a href="upload-excel.html" class="quick-action-box">
-                  <div class="quick-icon purple-bg">
-                    <i data-feather="upload-cloud"></i>
-                  </div>
-                  <div>
-                    <h5>Upload Excel</h5>
-                    <p>Import bulk insurance data</p>
-                  </div>
-                </a>
-
-                <a href="all-insurance.html" class="quick-action-box">
-                  <div class="quick-icon green-bg">
-                    <i data-feather="layers"></i>
-                  </div>
-                  <div>
-                    <h5>View All Insurance</h5>
-                    <p>Browse complete policy list</p>
-                  </div>
-                </a>
-
-                <a href="expire-insurance.html" class="quick-action-box">
-                  <div class="quick-icon orange-bg">
-                    <i data-feather="alert-circle"></i>
-                  </div>
-                  <div>
-                    <h5>Expire Insurance</h5>
-                    <p>Policies already expired</p>
-                  </div>
-                </a>
-
-                <a href="reexpire-insurance.html" class="quick-action-box">
-                  <div class="quick-icon blue-bg">
-                    <i data-feather="refresh-cw"></i>
-                  </div>
-                  <div>
-                    <h5>Re-Expire Insurance</h5>
-                    <p>Repeated expiry follow-up</p>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
-
+     
       @if(auth()->user()->role === 'sales_executive')
 
       <div class="row">
