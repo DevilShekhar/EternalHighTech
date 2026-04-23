@@ -16,6 +16,7 @@ class User extends Authenticatable
     'mobile_number',
     'gender',
     'role',
+    'status',
     'date_of_birth',
     'address',
     'password',

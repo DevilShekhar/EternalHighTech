@@ -61,17 +61,20 @@
                                                 @endif
                                                                                         </td>
                                     <td>
-                                        <div class="d-flex align-items-center gap-2 flex-nowrap">
-                                        <a href="{{ route('career.edit', $career->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                        <div class="action-btns">
+                                            <a href="{{ route('career.edit', $career->id) }}" class="btn btn-warning btn-sm">
+                                                Edit
+                                            </a>
 
-                                        <form action="{{ route('career.destroy', $career->id) }}" method="POST"class="delete-form">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                        </form>
+                                            <form action="{{ route('career.destroy', $career->id) }}" method="POST" class="delete-form d-inline m-0">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    Delete
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
-                                </tr>
                             @empty
                                 <tr>
                                     <td colspan="11" class="text-center">No career records found.</td>

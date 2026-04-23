@@ -120,6 +120,7 @@ class PortfolioController extends Controller
     {
         $portfolio->update([
             'status' => 0,
+            'updated_by' => auth()->id(),
           
         ]);
 

@@ -10,13 +10,13 @@
     <div class="section-body">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h4>All Blogs</h4>
+                <h4 class="mb-0">All Blogs</h4>
                 <a href="{{ route('blogs.create') }}" class="btn btn-primary">Add New Blog</a>
             </div>
 
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover" id="tableExport" style="width:100%;">
+                    <table class="table table-striped table-hover align-middle" id="tableExport" style="width:100%;">
                         <thead>
                             <tr>
                                 <th>Sr No</th>
@@ -35,24 +35,24 @@
                                     <td>{{ $blog->title ?? '-' }}</td>
                                     <td>{{ $blog->company_name ?? '-' }}</td>
                                     <td>{{ optional($blog->creator)->name ?? '-' }}</td>
-                                    <td>{{ optional($blog->updater)->name ?? '' }}</td>
+                                    <td>{{ optional($blog->updater)->name ?? '-' }}</td>
                                     <td>
-                                        @if($blog->status == 'Active')
-                                            <span class="btn btn-success btn-sm">Active</span>
+                                        @if($blog->status == 'Active' || $blog->status == 1)
+                                            <span class="badge badge-success px-3 py-2">Active</span>
                                         @else
-                                            <span class="btn btn-danger btn-sm">Inactive</span>
+                                            <span class="badge badge-danger px-3 py-2">Inactive</span>
                                         @endif
                                     </td>
                                     <td>
-                                        <div class="d-flex align-items-center gap-2 flex-nowrap">
+                                        <div class="action-btns">
                                             <a href="{{ route('blogs.edit', $blog->id) }}" class="btn btn-warning btn-sm">
                                                 Edit
                                             </a>
 
-                                            <form action="{{ route('blogs.destroy', $blog->id) }}" method="POST" class="delete-form m-0">
+                                            <form action="{{ route('blogs.destroy', $blog->id) }}" method="POST" class="delete-form d-inline m-0">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                <button type="submit" class="btn btn-danger btn-sm">
                                                     Delete
                                                 </button>
                                             </form>
@@ -73,6 +73,17 @@
 </section>
 
 <style>
+    .action-btns {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: nowrap;
+    }
+
+    .action-btns form {
+        margin: 0;
+    }
+
     #tableExport_filter {
         float: right;
         text-align: right;
@@ -103,10 +114,18 @@
 </style>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#tableExport').on('draw.dt init.dt', function () {
-            $('#tableExport_filter').css({'float': 'right', 'text-align': 'right'});
-            $('#tableExport_wrapper .row:last-of-type').css({'display': 'flex', 'flex-direction': 'column', 'align-items': 'flex-end'});
+            $('#tableExport_filter').css({
+                'float': 'right',
+                'text-align': 'right'
+            });
+
+            $('#tableExport_wrapper .row:last-of-type').css({
+                'display': 'flex',
+                'flex-direction': 'column',
+                'align-items': 'flex-end'
+            });
         });
     });
 </script>

@@ -47,18 +47,26 @@
                                             <span class="badge bg-danger">Inactive</span>
                                         @endif
                                     </td>
-                                    <td class="d-flex gap-2">
-                                        <a href="{{ route('home-banner.edit', $banner->id) }}" class="btn btn-sm btn-info">Edit</a>
+                                    <td>
+                                        <div class="action-btns">
+                                            <a href="{{ route('home-banner.edit', $banner->id) }}" class="btn btn-sm btn-info">
+                                                Edit
+                                            </a>
 
-                                        @if($banner->status == 1)
-                                            <form action="{{ route('home-banner.destroy', $banner->id) }}" method="POST" class="delete-form">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                            </form>
-                                        @else
-                                            <button type="button" class="btn btn-sm btn-secondary" disabled>Inactive</button>
-                                        @endif
+                                            @if($banner->status == 1)
+                                                <form action="{{ route('home-banner.destroy', $banner->id) }}" method="POST" class="delete-form d-inline m-0">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <button type="button" class="btn btn-sm btn-secondary" disabled>
+                                                    Inactive
+                                                </button>
+                                            @endif
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
