@@ -137,6 +137,10 @@
                         <a href="{{ route('users.profile', auth()->user()->id) }}" class="dropdown-item has-icon">
                         <i class="far fa-user"></i> Profile
                         </a>
+                        <a href="{{ route('password.verify') }}" class="dropdown-item has-icon">
+                           <i class="fa-regular fa-eye"></i> Change Password
+                        </a>
+                        
                         <a href="timeline.html" class="dropdown-item has-icon">
                         <i class="fas fa-bolt"></i> Activities
                         </a>
