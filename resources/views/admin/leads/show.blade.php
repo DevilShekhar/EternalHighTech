@@ -38,6 +38,21 @@
                             <p>{{ $lead->user->name ?? 'N/A' }}</p>
                         </div>
                     @endif
+                    <div class="col-md-3">
+                        <strong>Services:</strong>
+                        <p>{{ $lead->services }}</p>
+                    </div>
+
+                    <div class="col-md-3">
+                        <strong>Budget:</strong>
+                        <p>{{ $lead->budget ?? 'N/A' }}</p>
+                    </div>
+
+                    <div class="col-md-3">
+                        <strong>Message:</strong>
+                        <p>{{ $lead->message ?? 'N/A' }}</p>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -77,66 +92,101 @@
             <button class="btn btn-primary"  data-toggle="modal"  data-target="#exampleModal"> + Add Follow-up </button>
         </div>
     @endif
+<style>
+    .timeline {
+    position: relative;
+    padding-left: 20px;
+}
 
+
+.timeline-marker {
+    position: relative;
+}
+
+.timeline-marker span {
+    display: block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin-top: 8px;
+}
+</style>
     <!-- 🔹 Follow-up Timeline -->
     <div class="card p-3">
         <h5 class="mb-3">Follow-up Timeline</h5>
 
-        @forelse($lead->followups as $f)
-            <div class="d-flex mb-3">
+        <div class="timeline">
 
-                <!-- Timeline Dot -->
-                <div class="me-3">
-                    <span class="badge bg-primary rounded-circle p-2">●</span>
+            @forelse($lead->followups as $f)
+                <div class="timeline-item d-flex mb-4">                  
+                    <!-- Content -->
+                    <div class="card shadow-sm w-100 border-0">
+                        <div class="card-body">
+
+                            <!-- Header -->
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="mb-0 fw-bold">{{ $f->user->name }}</h6>
+                                <small class="text-muted">
+                                    {{ $f->created_at->diffForHumans() }}
+                                </small>
+                            </div>
+
+                            <!-- Status Badges -->
+                            <div class="mb-2">
+                                <span class="badge bg-info text-dark">
+                                    {{ ucfirst($f->action_type) }}
+                                </span>
+                                <span class="badge bg-success">
+                                    {{ ucfirst($f->status) }}
+                                </span>
+                            </div>
+
+                            <!-- Optional Info -->
+                            @if($f->business_name)
+                                <p class="mb-1">
+                                    <strong>Business:</strong> {{ $f->business_name }}
+                                </p>
+                            @endif
+
+                            @if($f->alt_mobile)
+                                <p class="mb-1">
+                                    <strong>Alt Mobile:</strong> {{ $f->alt_mobile }}
+                                </p>
+                            @endif
+
+                            @if($f->short_desc)
+                                <p class="text-muted mb-2">
+                                    {{ $f->short_desc }}
+                                </p>
+                            @endif
+
+                            <!-- Note -->
+                            <p class="mb-2">{{ $f->note }}</p>
+
+                            <!-- Footer -->
+                            <div class="d-flex justify-content-between border-top pt-2 mt-2">
+                                <small class="text-muted">
+                                    <b>Next:</b>
+                                    {{ $f->next_followup_date 
+                                        ? $f->next_followup_date->format('d M Y, h:i A') 
+                                        : 'Not scheduled' }}
+                                </small>
+
+                                <small class="text-muted">
+                                    <b>Created:</b>
+                                    {{ $f->created_at->format('d M Y, h:i A') }}
+                                </small>
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
+            @empty
+                <p class="text-muted">No follow-ups yet.</p>
+            @endforelse
 
-                <!-- Content -->
-            <div class="flex-grow-1 border rounded p-3">
-
-                <div class="d-flex justify-content-between">
-                    <strong>{{ $f->user->name }}</strong>
-                    <small>{{ $f->created_at->diffForHumans() }}</small>
-                </div>
-
-                <div class="mt-1">
-                    <span class="badge bg-info">{{ ucfirst($f->action_type) }}</span>
-                    <span class="badge bg-success">{{ ucfirst($f->status) }}</span>
-                </div>
-
-                <!-- Business Name -->
-                @if($f->business_name)
-                    <p><strong>Business:</strong> {{ $f->business_name }}</p>
-                @endif
-
-                @if($f->alt_mobile)
-                    <p><strong>Alt Mobile:</strong> {{ $f->alt_mobile }}</p>
-                @endif
-
-                @if($f->short_desc)
-                    <p class="mb-1 text-muted">
-                        {{ $f->short_desc }}
-                    </p>
-                @endif
-
-                {{-- EXISTING NOTE --}}
-                <p class="mt-2 mb-1">{{ $f->note }}</p>
-                <div class="d-flex justify-content-between">
-                     <small class="text-muted">
-                    {{ $f->next_followup_date 
-                        ? $f->next_followup_date->format('d M Y, h:i A') 
-                        : 'No follow-up scheduled' }}
-                </small>
-                <small class="text-muted"> <b> Created At: </b>
-                    {{ $f->created_at 
-                        ? $f->created_at->format('d M Y, h:i A') 
-                        : '' }}
-                </small>
-                </div>
-               
             </div>
-        @empty
-            <p class="text-muted">No follow-ups yet.</p>
-        @endforelse
 
     </div>
 

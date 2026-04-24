@@ -17,7 +17,7 @@
       <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
       <!-- Add this to your <head> section if SweetAlert is not included -->
 
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
       <link rel="stylesheet" href="{{ asset('assets/css/app.min.css') }}">
       <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
       <link rel="stylesheet" href="{{ asset('assets/css/components.css') }}">
@@ -372,19 +372,66 @@
       <script src="{{ asset('assets/bundles/summernote/summernote-bs4.js') }}"></script>
       <!-- 🔊 SOUND -->
       <audio id="leadSound" src="{{ asset('sounds/notification.mp3') }}" preload="auto"></audio>
+
+      <!-- SweetAlert2 -->
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+      <!-- 🔘 ENABLE SOUND BUTTON -->
+      <button id="enableSoundBtn" style="position:fixed;bottom:20px;right:20px;z-index:9999;padding:10px 15px; background:#28a745;color:#fff;border:none; border-radius:5px;">
+         🔊 Enable Sound
+      </button>
+
       <script>
          let isPopupOpen = false;
 
-         const leadSound = document.getElementById('leadSound');
+         // ✅ LOAD FROM STORAGE (KEY FIX)
+         let isAudioUnlocked = localStorage.getItem('audioUnlocked') === 'true';
 
-         // unlock audio
-         document.addEventListener('click', function () {
+         const leadSound = document.getElementById('leadSound');
+         const enableBtn = document.getElementById('enableSoundBtn');
+
+
+         // ✅ HIDE BUTTON IF ALREADY ENABLED
+         if (isAudioUnlocked) {
+            enableBtn.style.display = "none";
+         }
+
+
+         // 🔓 UNLOCK AUDIO (STRONG VERSION)
+         function unlockAudio() {
+            if (isAudioUnlocked) return;
+
+            // 🔥 IMPORTANT TRICK (fix autoplay issue)
+            leadSound.muted = true;
+
             leadSound.play().then(() => {
                leadSound.pause();
                leadSound.currentTime = 0;
-            }).catch(() => {});
-         }, { once: true });
+               leadSound.muted = false;
 
+               isAudioUnlocked = true;
+
+               // ✅ SAVE STATE
+               localStorage.setItem('audioUnlocked', 'true');
+
+               enableBtn.style.display = "none";
+
+               console.log("✅ Audio unlocked & saved");
+            }).catch(() => {
+               console.warn("❌ Unlock failed");
+            });
+         }
+
+
+         // ✅ AUTO UNLOCK ON FIRST CLICK
+         document.addEventListener('click', unlockAudio, { once: true });
+         document.addEventListener('touchstart', unlockAudio, { once: true });
+
+         // ✅ BUTTON CLICK
+         enableBtn.addEventListener('click', unlockAudio);
+
+
+         // 🔁 CHECK API EVERY 3 SECONDS
          setInterval(function () {
 
             if (isPopupOpen) return;
@@ -399,43 +446,50 @@
             .then(res => res.json())
             .then(data => {
 
-               console.log("API RESPONSE:", data); // 👈 DEBUG
 
                if (!data || !data.id) return;
 
                isPopupOpen = true;
 
                Swal.fire({
-                  title: "🚀 New Lead Assigned",
-                  html: `
-                     <b>Name:</b> ${data.name}<br>
-                     <b>Phone:</b> ${data.phone}<br>
-                     <b>Service:</b> ${data.services}<br>
-                     <b>Budget:</b> ${data.budget}
-                  `,
-                  icon: "success",
-                  confirmButtonText: "OK",
-                  showCancelButton: false,
-                  allowOutsideClick: false,
-                  allowEscapeKey: false,
+                     title: "🚀 New Lead Assigned",
+                     html: `
+                        <b>Name:</b> ${data.name}<br>
+                        <b>Service:</b> ${data.services}<br>
+                        <b>Budget:</b> ${data.budget}
+                     `,
+                     icon: "success",
+                     confirmButtonText: "OK",
+                     allowOutsideClick: false,
+                     allowEscapeKey: false,
 
-                  didOpen: () => {
-                     leadSound.loop = true;
-                     leadSound.currentTime = 0;
-                     leadSound.play().catch(() => {});
-                  }
+                     didOpen: () => {
+
+                        if (!isAudioUnlocked) {
+                           console.warn("🔇 Sound not enabled yet");
+                           return;
+                        }
+
+                        leadSound.loop = true;
+                        leadSound.currentTime = 0;
+
+                        // ✅ SIMPLE PLAY (now works)
+                        leadSound.play().catch(() => {
+                           console.warn("🔇 Still blocked (rare case)");
+                        });
+                     }
 
                }).then(() => {
 
-                  // 🔇 STOP SOUND
-                  leadSound.pause();
-                  leadSound.currentTime = 0;
-                  leadSound.loop = false;
+                     // 🔇 STOP SOUND
+                     leadSound.pause();
+                     leadSound.currentTime = 0;
+                     leadSound.loop = false;
 
-                  isPopupOpen = false;
+                     isPopupOpen = false;
 
-                  // 🔁 REDIRECT
-                  window.location.href = '/leads';
+                     // 🔁 REDIRECT
+                     window.location.href = '/leads';
                });
 
             })
