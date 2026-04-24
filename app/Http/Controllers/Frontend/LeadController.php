@@ -140,7 +140,6 @@ class LeadController extends Controller
         return response()->json([
             'id' => $lead->id,
             'name' => $lead->name,
-            'phone' => $lead->phone,
             'services' => $lead->services,
             'budget' => $lead->budget,
         ]);
