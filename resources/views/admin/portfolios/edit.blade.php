@@ -44,49 +44,44 @@
                     </div>
 
                     {{-- STEP 1 --}}
-                    <div class="wizard-step-content" id="step-1">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label>Heading</label>
-                                <input type="text" name="heading" class="form-control required-step" value="{{ old('heading', $portfolio->heading) }}">
+                        <div class="wizard-step-content" id="step-1">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label>Heading</label>
+                                    <input type="text" name="heading" class="form-control required-step" value="{{ old('heading', $portfolio->heading) }}">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Sub Heading</label>
+                                    <input type="text" name="sub_heading" class="form-control required-step" value="{{ old('sub_heading', $portfolio->sub_heading) }}">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label>Image</label>
+                                    <input type="file" name="image" class="form-control">
+                                    @if($portfolio->image)
+                                        <img src="{{ asset('storage/' . $portfolio->image) }}" width="100" class="mt-2">
+                                    @endif
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label>Link One</label>
+                                    <input type="url" name="link_one" class="form-control required-step" value="{{ old('link_one', $portfolio->link_one) }}">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label>Link Two</label>
+                                    <input type="url" name="link_two" class="form-control required-step" value="{{ old('link_two', $portfolio->link_two) }}">
+                                </div>
+                                <div class="col-sm-12 mb-3">
+                                    <label>Description</label>
+                                    <textarea name="description" class="summernote form-control required-step">{{ old('description', $portfolio->description) }}</textarea>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label>Status</label>
+                                    <select name="status" id="status" class="form-control required-step">
+                                        <option value="1" {{ old('status', $portfolio->status) == 1 ? 'selected' : '' }}>Active</option>
+                                        <option value="0" {{ old('status', $portfolio->status) == 0 ? 'selected' : '' }}>Deactive</option>
+                                    </select>
+                                </div>
                             </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label>Sub Heading</label>
-                                <input type="text" name="sub_heading" class="form-control required-step" value="{{ old('sub_heading', $portfolio->sub_heading) }}">
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                <label>Image</label>
-                                <input type="file" name="image" class="form-control">
-                                @if($portfolio->image)
-                                    <img src="{{ asset('storage/' . $portfolio->image) }}" width="100" class="mt-2">
-                                @endif
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                <label>Link One</label>
-                                <input type="url" name="link_one" class="form-control required-step" value="{{ old('link_one', $portfolio->link_one) }}">
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                <label>Link Two</label>
-                                <input type="url" name="link_two" class="form-control required-step" value="{{ old('link_two', $portfolio->link_two) }}">
-                            </div>
-
-                            <div class="col-sm-12 mb-3">
-                                <label>Description</label>
-                                <textarea name="description" class="summernote form-control required-step">{{ old('description', $portfolio->description) }}</textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="status">Status</label>
-                        <select name="status" id="status" class="form-control" required>
-                            <option value="1" {{ $portfolio->status == 1 ? 'selected' : '' }}>Active</option>
-                            <option value="0" {{ $portfolio->status == 0 ? 'selected' : '' }}>Deactive</option>
-                        </select>
-                    </div>
+                         </div>
 
                     {{-- STEP 2 --}}
                     <div class="wizard-step-content d-none" id="step-2">
