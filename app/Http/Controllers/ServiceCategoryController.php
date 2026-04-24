@@ -43,24 +43,36 @@ class ServiceCategoryController extends Controller
         return view('admin.service-category.edit', compact('category'));
     }
 
-    public function update(Request $request, $id)
-    {
-        $category = ServiceCategory::findOrFail($id);
+   public function update(Request $request, ServiceCategory $serviceCategory)
+{
+    $request->validate([
+        'category_name' => 'required|string|max:255',
+        'status' => 'required|in:0,1',
+    ]);
 
-        $request->validate([
-            'category_name' => 'required|string|max:255',
-            'status' => 'required|in:0,1',
-        ]);
+    $baseSlug = Str::slug($request->category_name);
+    $slug = $baseSlug;
+    $count = 1;
 
-        $category->update([
-            'category_name' => $request->category_name,
-            'slug' => \Str::slug($request->category_name),
-            'status' => $request->status,
-            'updated_by' => auth()->id(),
-        ]);
-
-        return redirect()->route('service-category.index')->with('success', 'Category updated successfully.');
+    while (
+        ServiceCategory::where('slug', $slug)
+            ->where('id', '!=', $serviceCategory->id)
+            ->exists()
+    ) {
+        $slug = $baseSlug . '-' . $count;
+        $count++;
     }
+
+    $serviceCategory->update([
+        'category_name' => $request->category_name,
+        'slug' => $slug,
+        'status' => $request->status,
+        'updated_by' => auth()->id(),
+    ]);
+
+    return redirect()->route('service-category.index')
+        ->with('success', 'Service category updated successfully.');
+}
     public function destroy($id)
     {
         $serviceCategory = ServiceCategory::findOrFail($id);

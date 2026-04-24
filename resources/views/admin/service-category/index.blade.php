@@ -19,7 +19,7 @@
 
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover">
+                    <table class="table table-striped table-hover" id="tableExport" style="width:100%;">
                         <thead>
                             <tr>
                                 <th>Sr No</th>
@@ -46,18 +46,25 @@
                                             <span class="btn btn-danger btn-sm">Deactive</span>
                                         @endif
                                     </td>
-                                  <td>
-                                        <a href="{{ route('service-category.edit', $category->id) }}" class="btn btn-warning btn-sm me-2">
-                                            Edit
-                                        </a>
-
-                                        <form action="{{ route('service-category.destroy', $category->id) }}" method="POST" class="delete-form" style="display:inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">
-                                                Delete
-                                            </button>
-                                        </form>
+                                    <td>
+                                        <div class="action-btns">
+                                            <a href="{{ route('service-category.edit', $category->id) }}" class="btn btn-sm btn-info">
+                                                Edit
+                                            </a>
+                                                @if($category->status == 1)
+                                                    <form action="{{ route('service-category.destroy', $category->id) }}" method="POST" class="delete-form d-inline m-0">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger">
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <button type="button" class="btn btn-sm btn-secondary" disabled>
+                                                    Delete
+                                                </button>
+                                            @endif
+                                        </div>
                                     </td>
                                 </tr>
                             @empty

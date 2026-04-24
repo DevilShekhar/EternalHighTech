@@ -63,7 +63,7 @@
                                                 </form>
                                             @else
                                                 <button type="button" class="btn btn-sm btn-secondary" disabled>
-                                                    Inactive
+                                                    Delete
                                                 </button>
                                             @endif
                                         </div>

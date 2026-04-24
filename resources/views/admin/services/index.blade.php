@@ -51,15 +51,27 @@
                                             <span class="badge badge-danger">Inactive</span>
                                         @endif
                                     </td>
-                                    <td>
-                                        <a href="{{ route('services.edit', $service->id) }}" class="btn btn-warning btn-sm me-2">Edit</a>
+                                        <td>
+                                            <div class="action-btns">
+                                                <a href="{{ route('services.edit', $service->id) }}" class="btn btn-sm btn-info">
+                                                    Edit
+                                                </a>
 
-                                        <form action="{{ route('services.destroy', $service->id) }}" method="POST" class="delete-form" style="display:inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                        </form>
-                                    </td>
+                                                @if($service->status == 'Active')
+                                                    <form action="{{ route('services.destroy', $service->id) }}" method="POST" class="delete-form d-inline m-0">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger">
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <button type="button" class="btn btn-sm btn-secondary" disabled>
+                                                        Delete
+                                                    </button>
+                                                @endif
+                                            </div>
+                                       </td>
                                 </tr>
                             @empty
                                 <tr>

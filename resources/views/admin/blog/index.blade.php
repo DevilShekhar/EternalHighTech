@@ -30,7 +30,7 @@
                         </thead>
                         <tbody>
                             @forelse($blogs as $key => $blog)
-                                <tr>
+                              <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $blog->title ?? '-' }}</td>
                                     <td>{{ $blog->company_name ?? '-' }}</td>
@@ -43,22 +43,29 @@
                                             <span class="badge badge-danger px-3 py-2">Inactive</span>
                                         @endif
                                     </td>
-                                    <td>
-                                        <div class="action-btns">
-                                            <a href="{{ route('blogs.edit', $blog->id) }}" class="btn btn-warning btn-sm">
-                                                Edit
-                                            </a>
+                                    
+                                        <td>
+                                            <div class="action-btns">
+                                                <a href="{{ route('blogs.edit', $blog->id) }}" class="btn btn-sm btn-info">
+                                                    Edit
+                                                </a>
 
-                                            <form action="{{ route('blogs.destroy', $blog->id) }}" method="POST" class="delete-form d-inline m-0">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm">
-                                                    Delete
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
+                                                @if($blog->status == 1)
+                                                    <form action="{{ route('blogs.destroy', $blog->id) }}" method="POST" class="delete-form d-inline m-0">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger">
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <button type="button" class="btn btn-sm btn-secondary" disabled>
+                                                        Delete
+                                                    </button>
+                                                @endif
+                                            </div>
+                                        </td>                                
+                             </tr>
                             @empty
                                 <tr>
                                     <td colspan="7" class="text-center">No blog records found.</td>

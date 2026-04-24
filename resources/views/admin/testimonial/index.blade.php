@@ -79,17 +79,26 @@
                                                         <span class="btn btn-danger btn-sm">Deactive</span>
                                                     @endif
                                                 </td>
-                                                      <td>
-                                                            <a href="{{ route('testimonial.edit', $testimonial->id) }}" class="btn btn-sm btn-info me-2">
+                                                    <td>
+                                                        <div class="action-btns">
+                                                            <a href="{{ route('testimonial.edit', $testimonial->id) }}" class="btn btn-sm btn-info">
                                                                 Edit
                                                             </a>
-
-                                                            <form action="{{ route('testimonial.destroy', $testimonial->id) }}" method="POST" class="delete-form" style="display:inline-block;">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                                            </form>
-                                                        </td>
+                                                            @if($testimonial->status == 1)
+                                                                <form action="{{ route('testimonial.destroy', $testimonial->id) }}" method="POST" class="delete-form d-inline m-0">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                                        Delete
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <button type="button" class="btn btn-sm btn-secondary" disabled>
+                                                                    Delete
+                                                                </button>
+                                                            @endif
+                                                        </div>
+                                                    </td>
 
                                                     </tr>
                                         @empty

@@ -18,7 +18,7 @@
 
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover">
+                    <table class="table table-striped table-hover align-middle" id="tableExport" style="width:100%;">
                         <thead>
                             <tr>
                                 <th>Sr No</th>
@@ -62,15 +62,26 @@
                                             @endif
                                         </td>
                                    
-                                        <td>
-                                            <a href="{{ route('portfolios.edit', $portfolio->id) }}" class="btn btn-warning btn-sm me-2">Edit</a>
-
-                                            <form action="{{ route('portfolios.destroy', $portfolio->id) }}" method="POST" style="display:inline-block;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                            </form>
-                                        </td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <a href="{{ route('portfolios.edit', $portfolio->id) }}" class="btn btn-sm btn-info">
+                                                Edit
+                                            </a>
+                                            @if($portfolio->status == 1)
+                                                <form action="{{ route('portfolios.destroy', $portfolio->id) }}" method="POST" class="delete-form d-inline m-0">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <button type="button" class="btn btn-sm btn-secondary" disabled>
+                                                    Delete
+                                                </button>
+                                            @endif
+                                        </div>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
